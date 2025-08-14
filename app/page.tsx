@@ -1,15 +1,70 @@
+"use client"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, Heart, Leaf, Recycle, Users, Award, Target, Eye } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ArrowRight, Heart, Leaf, Recycle, Users, Award, Target, Eye, ChevronDown, ChevronUp, CheckCircle, Shield, Droplets, Hand, AlertTriangle, Phone, MapPin, Clock, Mail, Calendar, Car, Bus, Smartphone, Star, User, ChevronLeft, ChevronRight } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
+import { AnimatedTestimonials } from "@/components/ui/animated-testimonials"
 
 export default function HomePage() {
+  const [expandedSections, setExpandedSections] = useState<{ mission: boolean; vision: boolean; goals: boolean }>({
+    mission: false,
+    vision: false,
+    goals: false
+  })
+
+  const [scrollPosition, setScrollPosition] = useState(0)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Perbaiki error hydration dengan menggunakan useEffect untuk kalkulasi dinamis
+  const [selisihTahun, setSelisihTahun] = useState<number>(0)
+  const tahunBerdiriAwal = 2010
+
+  useEffect(() => {
+    const tahunSaatIni = new Date().getFullYear()
+    setSelisihTahun(tahunSaatIni - tahunBerdiriAwal)
+  }, [])
+
+  const toggleSection = (section: 'mission' | 'vision' | 'goals') => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }))
+  }
+
+  const pengurus = [
+    { name: "Tatiek Sri Rochiati", role: "Ketua", color: "green", photo: "/TatiekSriRochiati.png" },
+    { name: "Riri FS Indralin", role: "Wakil Ketua", color: "red", photo: "/RiriFSIndralin.png" },
+    { name: "Indah Kurniasih", role: "Sekretaris", color: "green", photo: null },
+    { name: "Sudarmiyanti", role: "Bendahara", color: "red", photo: "/Sudarmiyanti.png" },
+    { name: "Dwi Yuliati", role: "Seksi Keterampilan", color: "green", photo: "/DwiYuliati.png" },
+    { name: "Tyas Pujiwanti", role: "Anggota", color: "red", photo: "/TyasPujiwanti.png" },
+    { name: "Nanik", role: "Anggota", color: "green", photo: "/Nanik.png" },
+    { name: "Siti Khuzaemah", role: "Anggota", color: "red", photo: "/SitiKhuzaemah.png" },
+    { name: "Astuti", role: "Anggota", color: "green", photo: null },
+    { name: "Sriyati", role: "Anggota", color: "red", photo: "/Sriyati.png" },
+    { name: "Nurjanah", role: "Anggota", color: "green", photo: "/Nurjanah.png" },
+  ]
+
+  const scroll = (direction: 'left' | 'right') => {
+    const container = scrollRef.current
+    if (container) {
+      const scrollAmount = 320 // lebar kartu + jarak
+      const newPosition = direction === 'left' 
+        ? Math.max(0, scrollPosition - scrollAmount)
+        : Math.min(container.scrollWidth - container.clientWidth, scrollPosition + scrollAmount)
+      
+      container.scrollTo({ left: newPosition, behavior: 'smooth' })
+      setScrollPosition(newPosition)
+    }
+  }
+
   return (
     <div className="min-h-screen pt-16 lg:pt-20">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-50 via-white to-red-50 py-16 lg:py-24 overflow-hidden">
-        {/* Background decorative elements */}
+              {/* ===== BAGIAN UTAMA ===== */}
+      {/* Bagian Hero */}
+      <section id="home" className="relative bg-white py-16 lg:py-24 overflow-hidden">
+        {/* Elemen dekoratif latar belakang */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-100 rounded-full opacity-20 animate-pulse"></div>
           <div
@@ -23,168 +78,180 @@ export default function HomePage() {
             <div className="text-center lg:text-left space-y-6 lg:space-y-8">
               <div className="space-y-4">
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
-                  Building a{" "}
+                  Membangun {" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-500">
-                    Cleaner Future
+                    Masa Depan Cerah
                   </span>{" "}
-                  for{" "}
+                  untuk{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500">
-                    Tugurejo Village
+                    Kelurahan Tugurejo 
                   </span>
                 </h1>
-                <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  Bank Sampah Mawar Merah is dedicated to transforming waste management in our community through
-                  innovative recycling programs and environmental education.
+                <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0 text-justify">
+                Bank Sampah Mawar Merah berkomitmen untuk mengubah pengelolaan sampah di komunitas kami melalui program daur ulang inovatif dan pendidikan lingkungan.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center">
                 <Button
-                  asChild
                   size="lg"
                   className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-base lg:text-lg"
+                  onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  <Link href="/about">
-                    Learn More About Us <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
+                  Pelajari Lebih Lanjut <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button
-                  asChild
                   variant="outline"
                   size="lg"
                   className="border-2 border-red-500 text-red-600 hover:bg-red-50 bg-transparent hover:border-red-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-base lg:text-lg"
+                  onClick={() => document.getElementById('map')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  <Link href="/map">Find Our Location</Link>
+                  Temukan Lokasi Kami
                 </Button>
               </div>
             </div>
 
             <div className="relative mt-8 lg:mt-0">
               <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
-                <Image
-                  src="/placeholder.svg?height=500&width=700&text=Community+Waste+Management"
-                  alt="Community waste management activities"
+                <img
+                  src="/HomeDashboard.jpg"
+                  alt="Dashboard Utama"
                   width={700}
                   height={500}
-                  className="w-full h-auto"
+                  className="w-full h-auto object-cover"
+                  style={{maxHeight: '500px'}}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-              </div>
-              {/* Floating stats */}
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-lg p-4 transform hover:scale-105 transition-transform duration-300">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-green-100 p-2 rounded-lg">
-                    <Users className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900">150+</div>
-                    <div className="text-sm text-gray-600">Active Members</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Mission, Vision, Goals */}
+      {/* Misi, Visi, Tujuan */}
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 lg:mb-20">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
-              Our Commitment to the Environment
+              Komitmen Kami untuk Lingkungan
             </h2>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              We believe in creating sustainable solutions that benefit both our community and the environment.
+              Kami percaya dalam menciptakan solusi berkelanjutan yang bermanfaat bagi komunitas dan lingkungan kami.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {/* Mission */}
-            <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-green-50 to-white">
-              <CardContent className="p-6 lg:p-8 text-center h-full flex flex-col">
+            <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-green-50 to-white h-fit">
+              <CardContent className="p-6 lg:p-8 text-center flex flex-col">
                 <div className="bg-gradient-to-br from-green-500 to-green-600 w-16 h-16 lg:w-20 lg:h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
                   <Target className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Our Mission</h3>
-                <p className="text-gray-600 leading-relaxed flex-grow text-sm lg:text-base">
-                  To reduce waste in Tugurejo Village through community-based recycling programs, environmental
-                  education, and sustainable waste management practices.
-                </p>
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Misi Kami</h3>
+                
+                <div className="text-gray-600 leading-relaxed text-sm lg:text-base text-justify">
+                  <div className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.mission ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className="pb-4 space-y-2">
+                      <div>1. Menyadarkan masyarakat akan pentingnya menjaga kebersihan lingkungan.</div>
+                      <div>2. Mendukung program pemerintah dalam pengelolaan sampah.</div>
+                      <div>3. Mendorong masyarakat untuk tidak membuang sampah sembarangan.</div>
+                      <div>4. Mengajak warga untuk membuang sampah pada tempatnya.</div>
+                      <div>5. Mencegah kebiasaan membuang sampah ke saluran air.</div>
+                      <div>6. Mengedukasi masyarakat untuk tidak membakar sampah.</div>
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={() => toggleSection('mission')}
+                    className="flex items-center justify-center w-full mt-4 text-green-600 hover:text-green-700 transition-colors duration-200 font-medium"
+                  >
+                    {expandedSections.mission ? (
+                      <>
+                        Lihat Lebih Sedikit <ChevronUp className="ml-1 h-4 w-4" />
+                      </>
+                    ) : (
+                      <>
+                        Lihat Selengkapnya <ChevronDown className="ml-1 h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
               </CardContent>
             </Card>
 
             {/* Vision */}
-            <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-red-50 to-white">
-              <CardContent className="p-6 lg:p-8 text-center h-full flex flex-col">
+            <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-red-50 to-white h-fit">
+              <CardContent className="p-6 lg:p-8 text-center flex flex-col">
                 <div className="bg-gradient-to-br from-red-500 to-red-600 w-16 h-16 lg:w-20 lg:h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
                   <Eye className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Our Vision</h3>
-                <p className="text-gray-600 leading-relaxed flex-grow text-sm lg:text-base">
-                  To become a model waste management organization that inspires other communities to adopt sustainable
-                  practices and create a cleaner, healthier environment.
-                </p>
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Visi Kami</h3>
+                
+                <div className="text-gray-600 leading-relaxed text-sm lg:text-base">
+                  <div className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.vision ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className="pb-4">
+                      Menciptakan lingkungan yang bersih, sehat, dan bebas polusi, serta meningkatkan kesadaran masyarakat terhadap pentingnya pengelolaan sampah yang bijak dan keberlanjutan.
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={() => toggleSection('vision')}
+                    className="flex items-center justify-center w-full mt-4 text-red-600 hover:text-red-700 transition-colors duration-200 font-medium"
+                  >
+                    {expandedSections.vision ? (
+                      <>
+                        Lihat Lebih Sedikit <ChevronUp className="ml-1 h-4 w-4" />
+                      </>
+                    ) : (
+                      <>
+                        Lihat Selengkapnya <ChevronDown className="ml-1 h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
               </CardContent>
             </Card>
 
             {/* Goals */}
-            <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-green-50 to-white md:col-span-3 lg:col-span-1">
-              <CardContent className="p-6 lg:p-8 text-center h-full flex flex-col">
+            <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-green-50 to-white md:col-span-3 lg:col-span-1 h-fit">
+              <CardContent className="p-6 lg:p-8 text-center flex flex-col">
                 <div className="bg-gradient-to-br from-green-500 to-green-600 w-16 h-16 lg:w-20 lg:h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
                   <Award className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Our Goals</h3>
-                <p className="text-gray-600 leading-relaxed flex-grow text-sm lg:text-base">
-                  To engage 100% of households in our recycling program, reduce village waste by 70%, and create
-                  economic opportunities through waste-to-value initiatives.
-                </p>
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Tujuan Kami</h3>
+                
+                <div className="text-gray-600 leading-relaxed text-sm lg:text-base">
+                  <div className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.goals ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className="pb-4">
+                      Menyadarkan masyarakat untuk lebih peduli lingkungan. BSMM tidak hanya fokus pada pengelolaan sampah, tetapi juga lingkungan secara umum karena program ini termasuk ke dalam proklim. 
+                      Selain itu, BSMM juga memiliki program untuk memberikan sedekah kepada kaum fakir miskin dan kaum duafa dari sebagian hasil keuntungan.
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={() => toggleSection('goals')}
+                    className="flex items-center justify-center w-full mt-4 text-green-600 hover:text-green-700 transition-colors duration-200 font-medium"
+                  >
+                    {expandedSections.goals ? (
+                      <>
+                        Lihat Lebih Sedikit <ChevronUp className="ml-1 h-4 w-4" />
+                      </>
+                    ) : (
+                      <>
+                        Lihat Selengkapnya <ChevronDown className="ml-1 h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* Impact Statistics */}
-      <section className="py-16 lg:py-24 bg-gradient-to-br from-green-50 via-white to-green-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 lg:mb-20">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
-              Our Environmental Impact
-            </h2>
-            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
-              Making a real difference in our community, one step at a time.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {[
-              { icon: Recycle, value: "2,500kg", label: "Waste Recycled Monthly", color: "green", delay: "0s" },
-              { icon: Users, value: "150+", label: "Active Members", color: "red", delay: "0.1s" },
-              { icon: Leaf, value: "60%", label: "Waste Reduction", color: "green", delay: "0.2s" },
-              { icon: Heart, value: "5", label: "Years of Service", color: "red", delay: "0.3s" },
-            ].map((stat, index) => (
-              <div key={index} className="text-center group" style={{ animationDelay: stat.delay }}>
-                <div
-                  className={`${stat.color === "green" ? "bg-gradient-to-br from-green-500 to-green-600" : "bg-gradient-to-br from-red-500 to-red-600"} w-20 h-20 lg:w-24 lg:h-24 rounded-2xl flex items-center justify-center mx-auto mb-4 lg:mb-6 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}
-                >
-                  <stat.icon className="h-10 w-10 lg:h-12 lg:w-12 text-white" />
-                </div>
-                <div
-                  className={`text-2xl lg:text-4xl font-bold ${stat.color === "green" ? "text-green-600" : "text-red-600"} mb-2 lg:mb-3`}
-                >
-                  {stat.value}
-                </div>
-                <div className="text-gray-600 text-sm lg:text-base font-medium px-2">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
+      {/* Ajakan Bertindak */}
       <section className="py-16 lg:py-24 bg-gradient-to-r from-green-600 via-green-500 to-red-600 relative overflow-hidden">
-        {/* Background pattern */}
+        {/* Pola latar belakang */}
         <div className="absolute inset-0 opacity-10">
           <div
             className="absolute inset-0"
@@ -196,29 +263,785 @@ export default function HomePage() {
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 lg:mb-8">
-            Join Our Mission for a Cleaner Environment
+            Bergabunglah dengan Misi Kami untuk Lingkungan yang Lebih Bersih
           </h2>
           <p className="text-lg sm:text-xl lg:text-2xl text-green-100 mb-8 lg:mb-12 leading-relaxed max-w-4xl mx-auto">
-            Be part of the solution. Learn how you can contribute to our waste management initiatives and help create a
-            sustainable future for Tugurejo Village.
+            Jadilah bagian dari solusi. Pelajari bagaimana Anda dapat berkontribusi pada inisiatif pengelolaan sampah kami dan membantu menciptakan masa depan yang berkelanjutan untuk Kelurahan Tugurejo.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center">
             <Button
-              asChild
               size="lg"
               variant="secondary"
               className="bg-white text-green-600 hover:bg-gray-50 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-base lg:text-lg font-semibold"
+              onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Link href="/about">Get Involved</Link>
+              Tentang Kami
             </Button>
             <Button
-              asChild
               size="lg"
               variant="outline"
               className="border-2 border-white text-white hover:bg-white hover:text-green-600 bg-transparent shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-base lg:text-lg font-semibold"
+              onClick={() => document.getElementById('health')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Link href="/health">Health Guidelines</Link>
+              Panduan Kesehatan
             </Button>
+          </div>
+        </div>
+      </section>
+
+              {/* ===== TENTANG KAMI ===== */}
+      {/* Bagian Hero Tentang Kami */}
+      <section id="about" className="relative bg-white py-16 lg:py-24 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-100 rounded-full opacity-20 animate-pulse"></div>
+          <div
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-red-100 rounded-full opacity-20 animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
+              Tentang{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-500">
+                Bank Sampah
+              </span>{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500">
+                Mawar Merah
+              </span>
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Temukan perjalanan kami, kenali pendiri kami, dan pelajari dampak positif yang kami ciptakan di Kelurahan Tugurejo dan sekitarnya.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Bagian Sejarah */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div className="space-y-6 lg:space-y-8">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Sejarah Kami</h2>
+              <div className="space-y-6 text-gray-600 leading-relaxed text-base lg:text-lg">
+                <p className="text-justify">
+                  Bank Sampah Mawar Merah (BSMM) didirikan pada tahun 2010 di Kelurahan Tugurejo, Semarang, sebagai kelanjutan dari program pemberdayaan masyarakat yang sebelumnya dijalankan oleh Badan Keswadayaan Masyarakat (BKM). Tujuan utama BSMM adalah menciptakan lingkungan yang bersih dari sampah sekaligus meningkatkan kesadaran masyarakat akan pentingnya pengelolaan sampah yang bijak.
+                </p>
+                <p className="text-justify">
+                  Awalnya, kondisi lingkungan di Tugurejo cukup memprihatinkan karena kurangnya kesadaran masyarakat terhadap kebersihan. BSMM hadir sebagai solusi dengan memulai kegiatan pemilahan sampah di satu RT. Sampah-sampah kering seperti kardus, plastik, botol, dan kertas dikumpulkan dari rumah ke rumah, dipilah, ditimbang, dan dihargai sesuai jenisnya.
+                </p>
+                <p className="text-justify">
+                  Dipimpin oleh Ibu Tatiek sejak awal berdiri, BSMM dikelola oleh 11 anggota aktif hingga kini. Meski awalnya tidak mudah mengajak warga bergabung, sosialisasi dan bukti nyata manfaatnya membuat jumlah partisipasi meningkat pesat dari 58 Kartu Keluarga menjadi 599 KK yang tersebar di RW 1 dan RW 5.
+                </p>
+              </div>
+
+              {/* Sorotan timeline */}
+              <div className="grid grid-cols-2 gap-4 lg:gap-6 mt-8">
+                <div className="bg-green-50 p-4 lg:p-6 rounded-xl border border-green-100">
+                  <div className="text-2xl lg:text-3xl font-bold text-green-600 mb-2">2010</div>
+                  <div className="text-sm lg:text-base text-gray-700">Didirikan oleh BKM di Tugurejo</div>
+                </div>
+                <div className="bg-red-50 p-4 lg:p-6 rounded-xl border border-red-100">
+                  <div className="text-2xl lg:text-3xl font-bold text-red-600 mb-2">599</div>
+                  <div className="text-sm lg:text-base text-gray-700">Kartu Keluarga berpartisipasi</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative mt-8 lg:mt-0">
+              <AnimatedTestimonials
+                testimonials={[
+                  { quote: "", name: "", designation: "", src: "/HomeImg1.jpg" },
+                  { quote: "", name: "", designation: "", src: "/HomeImg2.jpg" },
+                  { quote: "", name: "", designation: "", src: "/HomeImg3.jpg" },
+                ]}
+                autoplay={true}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bagian Pengurus */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">Pengurus Kami</h2>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
+              Tim pengurus yang berdedikasi menjalankan misi lingkungan kami.
+            </p>
+          </div>
+
+          {/* Kontrol Slider */}
+          <div className="flex justify-between items-center mb-8">
+            <button
+              onClick={() => scroll('left')}
+              className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 text-gray-600 hover:text-green-600"
+              disabled={scrollPosition <= 0}
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+            <button
+              onClick={() => scroll('right')}
+              className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 text-gray-600 hover:text-green-600"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+          </div>
+
+          {/* Kontainer Kartu yang Dapat Digeser */}
+          <div 
+            ref={scrollRef}
+            className="flex gap-6 overflow-x-auto scrollbar-hide pb-4"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {pengurus.map((person, index) => (
+              <Card
+                key={index}
+                className="flex-shrink-0 w-80 group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white"
+              >
+                <CardContent className="p-6 lg:p-8 text-center">
+                  <div className="relative mb-6">
+                    <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 overflow-hidden">
+                      {person.photo ? (
+                        <img
+                          src={person.photo}
+                          alt={`Foto ${person.name}`}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      ) : (
+                        <User className="h-12 w-12 text-gray-400" />
+                      )}
+                    </div>
+                    <div
+                      className={`absolute -bottom-2 -right-2 w-8 h-8 ${person.color === "green" ? "bg-gradient-to-br from-green-500 to-green-600" : "bg-gradient-to-br from-red-500 to-red-600"} rounded-full flex items-center justify-center shadow-lg`}
+                    >
+                      <Star className="h-4 w-4 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-2">{person.name}</h3>
+                  <p
+                    className={`${person.color === "green" ? "text-green-600" : "text-red-600"} font-semibold text-sm lg:text-base`}
+                  >
+                    {person.role}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Program (Dampak Lingkungan) */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
+              Program Kami
+            </h2>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
+              Program-program yang kami jalankan untuk lingkungan yang lebih baik.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-16">
+            <div className="space-y-6 lg:space-y-8">
+              <h3 className="text-2xl lg:text-3xl font-bold text-green-600">Program Lingkungan</h3>
+              <div className="space-y-6">
+                <div className="bg-green-50 p-6 rounded-xl border border-green-100">
+                  <p className="text-gray-700 text-base lg:text-lg leading-relaxed text-justify">
+                    Program Bank Sampah Mawar Merah bertujuan menyadarkan masyarakat untuk lebih peduli lingkungan. BSMM tidak hanya fokus pada pengelolaan sampah, tetapi juga lingkungan secara umum karena program ini termasuk ke dalam proklim.
+                  </p>
+                </div>
+                <div className="bg-red-50 p-6 rounded-xl border border-red-100">
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-red-100 p-3 rounded-xl">
+                      <Heart className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 text-base lg:text-lg mb-2">Program Sosial</h4>
+                      <p className="text-gray-600 text-sm lg:text-base leading-relaxed">
+                        BSMM juga memiliki program untuk memberikan sedekah kepada kaum fakir miskin dan kaum duafa dari sebagian hasil keuntungan.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <AnimatedTestimonials
+                testimonials={[
+                  { quote: "", name: "", designation: "", src: "/Program1.jpg" },
+                  { quote: "", name: "", designation: "", src: "/Program2.jpg" },
+                  { quote: "", name: "", designation: "", src: "/Program3.jpg" },
+                  { quote: "", name: "", designation: "", src: "/Program4.jpg" },
+                ]}
+                autoplay={true}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Kegiatan (Dampak Komunitas) */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">Kegiatan Kami</h2>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
+              Berbagai kegiatan yang kami lakukan untuk mendukung program lingkungan.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div className="relative order-2 lg:order-1">
+              <AnimatedTestimonials
+                testimonials={[
+                  { quote: "", name: "", designation: "", src: "/Kegiatan1.jpg" },
+                  { quote: "", name: "", designation: "", src: "/Kegiatan2.jpg" },
+                  { quote: "", name: "", designation: "", src: "/Kegiatan3.jpg" },
+                ]}
+                autoplay={true}
+              />
+            </div>
+
+            <div className="space-y-6 lg:space-y-8 order-1 lg:order-2">
+              <h3 className="text-2xl lg:text-3xl font-bold text-red-600">Kegiatan Rutin</h3>
+              <div className="space-y-6">
+                {[
+                  {
+                    icon: Users,
+                    title: "Sosialisasi Lingkungan",
+                    description: "Sosialisasi mengenai pentingnya menjaga lingkungan, mengelola sampah, dan pentingnya memanfaatkan lahan terbatas untuk menanam tanaman.",
+                  },
+                  {
+                    icon: Recycle,
+                    title: "Kerajinan dari Limbah",
+                    description: "Membuat ketrampilan dari limbah yang kemudian bisa dijual atau untuk kebutuhan pribadi.",
+                  },
+                  {
+                    icon: Calendar,
+                    title: "Gerebek Sampah",
+                    description: "Gerebek sampah di laut sebagai upaya pembersihan lingkungan.",
+                  },
+                  {
+                    icon: Award,
+                    title: "Pengelolaan Sampah",
+                    description: "Kupas tuntas dari hasil pilah sampah yang disetor ke BSMM, kemudian dijual kepada pengepul.",
+                  },
+                ].map((item, index) => (
+                  <div key={index} className="flex items-start space-x-4 group">
+                    <div className="bg-red-100 p-3 rounded-xl group-hover:bg-red-200 transition-colors duration-300">
+                      <item.icon className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 text-base lg:text-lg mb-2">{item.title}</h4>
+                      <p className="text-gray-600 text-sm lg:text-base leading-relaxed">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bagian Preview Video */}
+      <section className="py-16 lg:py-24 bg-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
+              Video Preview
+            </h2>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-4xl mx-auto">
+              Lihat bagaimana Bank Sampah Mawar Merah mengubah lingkungan Tugurejo menjadi lebih bersih dan berkelanjutan.
+            </p>
+          </div>
+          
+          <div className="relative">
+            {/* Kontainer Video dengan gaya Apple-like */}
+            <div className="relative mx-auto max-w-4xl">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-green-600 to-red-600">
+                {/* Tempat Video */}
+                <div className="aspect-video bg-gradient-to-br from-green-700 to-red-700 relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {/* Tombol Putar */}
+                    <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center cursor-pointer hover:bg-white transition-all duration-300 group shadow-lg">
+                      <div className="w-0 h-0 border-l-[12px] border-l-green-600 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-1 group-hover:scale-110 transition-transform duration-300"></div>
+                    </div>
+                  </div>
+                  
+                  {/* Teks Overlay Video */}
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
+                      <h3 className="text-gray-900 text-lg font-semibold mb-2">Bank Sampah Mawar Merah</h3>
+                      <p className="text-gray-600 text-sm">Mengubah sampah menjadi berkah untuk lingkungan yang lebih baik</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Elemen Dekoratif */}
+                <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full opacity-30"></div>
+                <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full opacity-30"></div>
+              </div>
+              
+              {/* Statistik Mengambang */}
+              <div className="absolute -top-8 -right-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-green-200 shadow-lg">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">599</div>
+                  <div className="text-sm text-gray-600">Kartu Keluarga</div>
+                </div>
+              </div>
+              
+              <div className="absolute -bottom-8 -left-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-red-200 shadow-lg">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-red-600">{selisihTahun}</div>
+                  <div className="text-sm text-gray-600">Tahun Berdiri</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Ajakan Bertindak */}
+          <div className="text-center mt-12">
+            <button className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              Tonton Video Lengkap
+            </button>
+          </div>
+        </div>
+      </section>
+
+              {/* ===== BAGIAN KESEHATAN ===== */}
+      {/* Bagian Hero Kesehatan */}
+      <section id="health" className="relative bg-white py-16 lg:py-24 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-100 rounded-full opacity-20 animate-pulse"></div>
+          <div
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-red-100 rounded-full opacity-20 animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-500">
+                Panduan Kesehatan & Keselamatan
+              </span>
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Keselamatan Anda adalah prioritas kami. Pelajari tentang tindakan pencegahan kesehatan dan langkah-langkah keselamatan untuk kegiatan pengelolaan sampah.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Peringatan Keselamatan Penting */}
+      <section className="py-8 lg:py-12 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Alert className="border-red-200 bg-gradient-to-r from-red-50 to-red-100 shadow-lg">
+            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <AlertDescription className="text-red-800 text-base lg:text-lg">
+              <strong>Penting:</strong> Selalu ikuti panduan keselamatan ini saat menangani bahan sampah. Jika Anda merasa tidak enak badan atau mengalami gejala setelah kegiatan penanganan sampah, segera cari pertolongan medis.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </section>
+
+      {/* Bagian APD */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
+              Alat Pelindung Diri (APD)
+            </h2>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
+              Peralatan pelindung penting untuk penanganan dan pemilahan sampah yang aman.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-16">
+            <div className="relative order-2 lg:order-1">
+              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                <img
+                  src="/Protokol.png"
+                  alt="APD Lengkap untuk pengelolaan sampah"
+                  width={700}
+                  height={500}
+                  className="w-full h-auto"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
+            </div>
+
+            <div className="space-y-6 lg:space-y-8 order-1 lg:order-2">
+              {[
+                {
+                  icon: Hand,
+                  title: "Sarung Tangan Pelindung",
+                  description:
+                    "Selalu kenakan sarung tangan tebal yang tahan tusukan saat menangani bahan sampah. Ganti sarung tangan segera jika robek atau terkontaminasi.",
+                  color: "green",
+                },
+                {
+                  icon: Shield,
+                  title: "Masker Wajah",
+                  description:
+                    "Kenakan masker N95 atau masker bedah untuk melindungi dari debu, bau, dan partikel udara. Ganti masker secara teratur, terutama saat basah atau kotor.",
+                  color: "red",
+                },
+                {
+                  icon: Eye,
+                  title: "Kacamata Keselamatan",
+                  description:
+                    "Lindungi mata Anda dari percikan, debu, dan puing. Penting saat memilah atau memproses bahan yang berpotensi berbahaya.",
+                  color: "green",
+                },
+              ].map((item, index) => (
+                <div key={index} className="flex items-start space-x-4 group">
+                  <div
+                    className={`${item.color === "green" ? "bg-green-100 group-hover:bg-green-200" : "bg-red-100 group-hover:bg-red-200"} p-3 rounded-xl transition-colors duration-300`}
+                  >
+                    <item.icon
+                      className={`h-6 w-6 lg:h-8 lg:w-8 ${item.color === "green" ? "text-green-600" : "text-red-600"}`}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2 lg:mb-3">{item.title}</h3>
+                    <p className="text-gray-600 leading-relaxed text-sm lg:text-base">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                title: "Apron Pelindung",
+                description: "Apron tahan air untuk melindungi pakaian dari kontaminasi dan tumpahan.",
+                color: "green",
+              },
+              {
+                title: "Sepatu Keselamatan",
+                description: "Sepatu tertutup dengan sol anti-slip untuk melindungi kaki dari benda tajam dan cairan.",
+                color: "red",
+              },
+              {
+                title: "Penutup Rambut",
+                description: "Jaga rambut tertutup untuk mencegah kontaminasi dan mempertahankan standar kebersihan.",
+                color: "green",
+              },
+              {
+                title: "Kotak P3K",
+                description: "Selalu sediakan kotak P3K di dekat Anda untuk perawatan segera luka ringan.",
+                color: "red",
+              },
+            ].map((item, index) => (
+              <Card
+                key={index}
+                className={`group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${item.color === "green" ? "bg-gradient-to-br from-green-50 to-white" : "bg-gradient-to-br from-red-50 to-white"}`}
+              >
+                <CardHeader className="text-center pb-4">
+                  <div
+                    className={`${item.color === "green" ? "bg-gradient-to-br from-green-500 to-green-600" : "bg-gradient-to-br from-red-500 to-red-600"} w-16 h-16 lg:w-20 lg:h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}
+                  >
+                    <Shield className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
+                  </div>
+                  <CardTitle className="text-lg lg:text-xl">{item.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm lg:text-base text-center leading-relaxed">{item.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Tips Kebersihan */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
+              Praktik Kebersihan Terbaik
+            </h2>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
+              Praktik kebersihan penting untuk mempertahankan kesehatan dan mencegah kontaminasi.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4 group">
+                  <div className="bg-blue-100 p-3 rounded-xl group-hover:bg-blue-200 transition-colors duration-300">
+                    <Droplets className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Protokol Cuci Tangan</h3>
+                    <ul className="space-y-3">
+                      {[
+                        "Cuci tangan setidaknya 20 detik dengan sabun dan air hangat",
+                        "Gunakan hand sanitizer dengan kandungan alkohol minimal 60%",
+                        "Cuci tangan sebelum makan, minum, atau menyentuh wajah",
+                        "Selalu cuci tangan setelah melepas sarung tangan atau APD",
+                      ].map((item, index) => (
+                        <li key={index} className="flex items-start space-x-3">
+                          <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-600 text-sm lg:text-base leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4 group">
+                  <div className="bg-green-100 p-3 rounded-xl group-hover:bg-green-200 transition-colors duration-300">
+                    <Shield className="h-6 w-6 lg:h-8 lg:w-8 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Aturan Kebersihan Umum</h3>
+                    <ul className="space-y-3">
+                      {[
+                        "Jangan pernah makan, minum, atau merokok saat menangani sampah",
+                        "Ganti pakaian segera setelah kegiatan penanganan sampah",
+                        "Mandi secepat mungkin setelah sesi kerja",
+                        "Jaga pakaian kerja terpisah dari cucian biasa",
+                      ].map((item, index) => (
+                        <li key={index} className="flex items-start space-x-3">
+                          <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-600 text-sm lg:text-base leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                <img
+                  src="/CuciTangan.jpeg"
+                  alt="Teknik cuci tangan yang benar"
+                  width={700}
+                  height={500}
+                  className="w-full h-auto"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Prosedur Darurat */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
+              Prosedur Darurat
+            </h2>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
+              Ketahui apa yang harus dilakukan dalam kasus kecelakaan atau keadaan darurat kesehatan.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-12">
+            <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-gradient-to-br from-red-50 to-white">
+              <CardHeader>
+                <CardTitle className="text-red-600 flex items-center space-x-3 text-xl lg:text-2xl">
+                  <AlertTriangle className="h-6 w-6 lg:h-8 lg:w-8" />
+                  <span>Dalam Kasus Cedera</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ol className="space-y-3 text-gray-600">
+                  {[
+                    "Hentikan kerja segera dan evaluasi cedera",
+                    "Berikan pertolongan pertama jika terlatih dan cedera ringan",
+                    "Untuk cedera serius, panggil layanan darurat (119)",
+                    "Bersihkan dan disinfeksi luka secara menyeluruh",
+                    "Laporkan insiden kepada penyelia",
+                    "Cari pertolongan medis jika gejala berlanjut",
+                  ].map((step, index) => (
+                    <li key={index} className="text-sm lg:text-base leading-relaxed">
+                      {index + 1}. {step}
+                    </li>
+                  ))}
+                </ol>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-gradient-to-br from-green-50 to-white">
+              <CardHeader>
+                <CardTitle className="text-green-600 flex items-center space-x-3 text-xl lg:text-2xl">
+                  <Shield className="h-6 w-6 lg:h-8 lg:w-8" />
+                  <span>Paparan Bahan Berbahaya</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ol className="space-y-3 text-gray-600">
+                  {[
+                    "Lepas APD yang terkontaminasi dengan hati-hati",
+                    "Bilas area yang terkena dengan air bersih selama 15 menit",
+                    "Lepas pakaian yang terkontaminasi",
+                    "Cuci secara menyeluruh dengan sabun dan air",
+                    "Cari pertolongan medis segera",
+                    "Laporkan insiden paparan",
+                  ].map((step, index) => (
+                    <li key={index} className="text-sm lg:text-base leading-relaxed">
+                      {index + 1}. {step}
+                    </li>
+                  ))}
+                </ol>
+              </CardContent>
+            </Card>
+          </div>
+
+        </div>
+      </section>
+
+              {/* ===== BAGIAN PETA ===== */}
+      {/* Bagian Hero Peta */}
+      <section id="map" className="relative bg-white py-16 lg:py-24 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-100 rounded-full opacity-20 animate-pulse"></div>
+          <div
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-red-100 rounded-full opacity-20 animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-500">
+                Temukan Kami
+              </span>{" "}
+              &{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500">
+                Hubungi Kami
+              </span>
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Kunjungi lokasi kami di Kelurahan Tugurejo atau hubungi kami untuk informasi lebih lanjut tentang program pengelolaan sampah dan layanan kami.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Peta dan Informasi Kontak */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+            {/* Peta Interaktif */}
+            <div className="space-y-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Lokasi Kami</h2>
+              <div className="bg-gray-100 rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-shadow duration-500">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.2!2d110.3!3d-7.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMDAnMDAuMCJTIDExMMKwMTgnMDAuMCJF!5e0!3m2!1sen!2sid!4v1234567890"
+                  width="100%"
+                  height="400"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Lokasi Bank Sampah Mawar Merah"
+                  className="lg:h-96"
+                ></iframe>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex-1 py-6 text-base lg:text-lg">
+                  <MapPin className="mr-2 h-5 w-5" />
+                  Dapatkan Petunjuk Arah
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border-2 border-red-500 text-red-600 hover:bg-red-50 bg-transparent hover:border-red-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex-1 py-6 text-base lg:text-lg"
+                >
+                  <Phone className="mr-2 h-5 w-5" />
+                  Telepon Kami
+                </Button>
+              </div>
+            </div>
+
+            {/* Informasi Kontak */}
+            <div className="space-y-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Informasi Kontak</h2>
+              <div className="space-y-6">
+                <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-gradient-to-br from-green-50 to-white">
+                  <CardHeader>
+                    <CardTitle className="text-green-600 flex items-center space-x-3 text-xl lg:text-2xl">
+                      <MapPin className="h-6 w-6 lg:h-8 lg:w-8" />
+                      <span>Alamat</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-700 text-base lg:text-lg leading-relaxed">
+                      Jl. Mawar Merah No. 15
+                      <br />
+                      Kelurahan Tugurejo, Kecamatan Tugu
+                      <br />
+                      Kota Semarang, Jawa Tengah 50151
+                      <br />
+                      Indonesia
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-gradient-to-br from-red-50 to-white">
+                  <CardHeader>
+                    <CardTitle className="text-red-600 flex items-center space-x-3 text-xl lg:text-2xl">
+                      <Phone className="h-6 w-6 lg:h-8 lg:w-8" />
+                      <span>Telepon & Email</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <Phone className="h-5 w-5 text-gray-500" />
+                      <span className="text-gray-700 text-base lg:text-lg">+62 24 123-4567 (Kantor)</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Phone className="h-5 w-5 text-gray-500" />
+                      <span className="text-gray-700 text-base lg:text-lg">+62 812-3456-7890 (Mobile)</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Mail className="h-5 w-5 text-gray-500" />
+                      <span className="text-gray-700 text-base lg:text-lg">info@banksampahmawarmerah.org</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-gradient-to-br from-green-50 to-white">
+                  <CardHeader>
+                    <CardTitle className="text-green-600 flex items-center space-x-3 text-xl lg:text-2xl">
+                      <Clock className="h-6 w-6 lg:h-8 lg:w-8" />
+                      <span>Jam Operasional</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3 text-gray-700 text-base lg:text-lg">
+                      <div className="flex justify-between items-center">
+                        <span>Senin - Jumat:</span>
+                        <span className="font-semibold">08:00 - 16:00</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Sabtu:</span>
+                        <span className="font-semibold">08:00 - 12:00</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Minggu:</span>
+                        <span className="font-semibold text-red-600">Tutup</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>

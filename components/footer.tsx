@@ -19,27 +19,30 @@ export default function Footer() {
           {/* Organization Info */}
           <div className="space-y-6">
             <div className="flex items-center space-x-3 group">
-              <div className="bg-gradient-to-br from-red-500 to-red-600 p-3 rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                <Recycle className="h-8 w-8 text-white" />
+              <div className="bg-white p-3 rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                <img
+                  src="/logoBSMM.png"
+                  alt="Logo Bank Sampah Mawar Merah"
+                  className="h-8 w-8 object-contain"
+                />
               </div>
               <div>
                 <h3 className="font-bold text-xl lg:text-2xl">Bank Sampah Mawar Merah</h3>
-                <p className="text-green-200 text-sm lg:text-base">Tugurejo Village</p>
+                <p className="text-green-200 text-sm lg:text-base">Kelurahan Tugurejo</p>
               </div>
             </div>
             <p className="text-green-100 text-sm lg:text-base leading-relaxed">
-              Committed to creating a cleaner environment through community-based waste management and recycling
-              programs that benefit both our community and future generations.
+              Berkomitmen untuk menciptakan lingkungan yang lebih bersih melalui pengelolaan sampah berbasis komunitas dan program daur ulang yang bermanfaat bagi komunitas dan generasi mendatang.
             </p>
             <div className="flex items-center space-x-2 text-green-200">
               <Heart className="h-5 w-5 text-red-400" />
-              <span className="text-sm lg:text-base">Serving the community since 2019</span>
+              <span className="text-sm lg:text-base">Melayani komunitas sejak 2010</span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-6">
-            <h4 className="font-semibold text-xl lg:text-2xl mb-6">Quick Links</h4>
+            <h4 className="font-semibold text-xl lg:text-2xl mb-6">Tautan Cepat</h4>
             <ul className="space-y-3">
               {[
                 { href: "/", label: "Home" },
@@ -62,22 +65,22 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div className="space-y-6">
-            <h4 className="font-semibold text-xl lg:text-2xl mb-6">Contact Information</h4>
+            <h4 className="font-semibold text-xl lg:text-2xl mb-6">Informasi Kontak</h4>
             <div className="space-y-4">
               <div className="flex items-start space-x-3 group">
                 <MapPin className="h-5 w-5 text-green-300 mt-1 group-hover:text-white transition-colors duration-300" />
                 <div>
                   <span className="text-green-100 text-sm lg:text-base leading-relaxed group-hover:text-white transition-colors duration-300">
-                    Jl. Mawar Merah No. 15
+                    Jl. Tugurejo Tim. XI No.1, Tugurejo
                     <br />
-                    Tugurejo Village, Semarang
+                    Kec. Tugu, Kota Semarang, Jawa Tengah 50182
                   </span>
                 </div>
               </div>
               <div className="flex items-center space-x-3 group">
                 <Phone className="h-5 w-5 text-green-300 group-hover:text-white transition-colors duration-300" />
                 <span className="text-green-100 text-sm lg:text-base group-hover:text-white transition-colors duration-300">
-                  +62 24 123-4567
+                  +62 896-5372-0581
                 </span>
               </div>
               <div className="flex items-center space-x-3 group">
@@ -90,15 +93,15 @@ export default function Footer() {
 
             {/* Operating Hours */}
             <div className="bg-green-700/50 p-4 lg:p-6 rounded-xl border border-green-600/30">
-              <h5 className="font-semibold text-white mb-3 text-base lg:text-lg">Operating Hours</h5>
+              <h5 className="font-semibold text-white mb-3 text-base lg:text-lg">Jam Operasional</h5>
               <div className="space-y-2 text-green-100 text-sm lg:text-base">
                 <div className="flex justify-between">
-                  <span>Mon - Fri:</span>
-                  <span>8:00 AM - 4:00 PM</span>
+                  <span>Sen - Jum:</span>
+                  <span>08:00 - 16:00</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Saturday:</span>
-                  <span>8:00 AM - 12:00 PM</span>
+                  <span>Sabtu:</span>
+                  <span>08:00 - 12:00</span>
                 </div>
               </div>
             </div>
@@ -107,9 +110,9 @@ export default function Footer() {
 
         <div className="border-t border-green-600/30 mt-12 pt-8 text-center">
           <p className="text-green-200 text-sm lg:text-base">
-            © {new Date().getFullYear()} Bank Sampah Mawar Merah. All rights reserved. Made with{" "}
+            © {new Date().getFullYear()} Bank Sampah Mawar Merah. Semua hak dilindungi. Dibuat dengan{" "}
             <Heart className="inline h-4 w-4 text-red-400 mx-1" />
-            for our environment.
+            untuk lingkungan kami.
           </p>
         </div>
       </div>
