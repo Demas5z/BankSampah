@@ -2,15 +2,36 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ArrowRight, Heart, Leaf, Recycle, Users, Award, Target, Eye, ChevronDown, ChevronUp, CheckCircle, Shield, Droplets, Hand, AlertTriangle, Phone, MapPin, Clock, Mail, Calendar, Car, Bus, Smartphone, Star, User, ChevronLeft, ChevronRight } from "lucide-react"
+import {
+  ArrowRight,
+  Award,
+  Target,
+  Eye,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle,
+  Shield,
+  Droplets,
+  Hand,
+  AlertTriangle,
+  Phone,
+  MapPin,
+  Clock,
+  Mail,
+  Star,
+  User,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react"
 import { useState, useRef, useEffect } from "react"
-import { AnimatedTestimonials } from "@/components/ui/animated-testimonials"
+import FocusCardsDemo from "@/components/focus-cards-demo"
+import ExpandableCardDemo from "@/components/expandable-card-demo"
 
 export default function HomePage() {
   const [expandedSections, setExpandedSections] = useState<{ mission: boolean; vision: boolean; goals: boolean }>({
     mission: false,
     vision: false,
-    goals: false
+    goals: false,
   })
 
   const [scrollPosition, setScrollPosition] = useState(0)
@@ -20,15 +41,75 @@ export default function HomePage() {
   const [selisihTahun, setSelisihTahun] = useState<number>(0)
   const tahunBerdiriAwal = 2010
 
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [currentSejarahIndex, setCurrentSejarahIndex] = useState(0)
+
+  const carouselImages = [
+    {
+      src: "/HomeDashboard.jpg",
+      alt: "Dashboard Utama Bank Sampah Mawar Merah",
+      title: "Dashboard Utama",
+      description: "Pusat koordinasi kegiatan Bank Sampah Mawar Merah",
+    },
+    {
+      src: "/HomeImg1.jpg",
+      alt: "Kegiatan Pemilahan Sampah",
+      title: "Pemilahan Sampah",
+      description: "Proses pemilahan sampah oleh anggota komunitas",
+    },
+    {
+      src: "/HomeImg2.jpg",
+      alt: "Sosialisasi Lingkungan",
+      title: "Sosialisasi Lingkungan",
+      description: "Edukasi masyarakat tentang pengelolaan sampah",
+    },
+    {
+      src: "/HomeImg3.jpg",
+      alt: "Kegiatan Daur Ulang",
+      title: "Kegiatan Daur Ulang",
+      description: "Mengubah sampah menjadi produk bernilai ekonomis",
+    },
+    {
+      src: "/Program1.jpg",
+      alt: "Program Pemberdayaan",
+      title: "Program Pemberdayaan",
+      description: "Memberdayakan masyarakat melalui pengelolaan sampah",
+    },
+    {
+      src: "/Program2.jpg",
+      alt: "Kegiatan Komunitas",
+      title: "Kegiatan Komunitas",
+      description: "Gotong royong membersihkan lingkungan bersama",
+    },
+  ]
+
+  // Auto-scroll effect for main carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1))
+    }, 4000) // Change image every 4 seconds
+
+    return () => clearInterval(interval)
+  }, [carouselImages.length])
+
+  // Auto-scroll effect for Sejarah carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSejarahIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1))
+    }, 4500) // Slightly different timing to avoid sync
+
+    return () => clearInterval(interval)
+  }, [carouselImages.length])
+
   useEffect(() => {
     const tahunSaatIni = new Date().getFullYear()
     setSelisihTahun(tahunSaatIni - tahunBerdiriAwal)
   }, [])
 
-  const toggleSection = (section: 'mission' | 'vision' | 'goals') => {
-    setExpandedSections(prev => ({
+  const toggleSection = (section: "mission" | "vision" | "goals") => {
+    setExpandedSections((prev) => ({
       ...prev,
-      [section]: !prev[section]
+      [section]: !prev[section],
     }))
   }
 
@@ -46,22 +127,23 @@ export default function HomePage() {
     { name: "Nurjanah", role: "Anggota", color: "green", photo: "/Nurjanah.png" },
   ]
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = (direction: "left" | "right") => {
     const container = scrollRef.current
     if (container) {
       const scrollAmount = 320 // lebar kartu + jarak
-      const newPosition = direction === 'left' 
-        ? Math.max(0, scrollPosition - scrollAmount)
-        : Math.min(container.scrollWidth - container.clientWidth, scrollPosition + scrollAmount)
-      
-      container.scrollTo({ left: newPosition, behavior: 'smooth' })
+      const newPosition =
+        direction === "left"
+          ? Math.max(0, scrollPosition - scrollAmount)
+          : Math.min(container.scrollWidth - container.clientWidth, scrollPosition + scrollAmount)
+
+      container.scrollTo({ left: newPosition, behavior: "smooth" })
       setScrollPosition(newPosition)
     }
   }
 
   return (
     <div className="min-h-screen pt-16 lg:pt-20">
-              {/* ===== BAGIAN UTAMA ===== */}
+      {/* ===== BAGIAN UTAMA ===== */}
       {/* Bagian Hero */}
       <section id="home" className="relative bg-white py-16 lg:py-24 overflow-hidden">
         {/* Elemen dekoratif latar belakang */}
@@ -78,17 +160,18 @@ export default function HomePage() {
             <div className="text-center lg:text-left space-y-6 lg:space-y-8">
               <div className="space-y-4">
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
-                  Membangun {" "}
+                  Membangun{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-500">
                     Masa Depan Cerah
                   </span>{" "}
                   untuk{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500">
-                    Kelurahan Tugurejo 
+                    Kelurahan Tugurejo
                   </span>
                 </h1>
                 <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0 text-justify">
-                Bank Sampah Mawar Merah berkomitmen untuk mengubah pengelolaan sampah di komunitas kami melalui program daur ulang inovatif dan pendidikan lingkungan.
+                  Bank Sampah Mawar Merah berkomitmen untuk mengubah pengelolaan sampah di komunitas kami melalui
+                  program daur ulang inovatif dan pendidikan lingkungan.
                 </p>
               </div>
 
@@ -96,7 +179,7 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-base lg:text-lg"
-                  onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
                 >
                   Pelajari Lebih Lanjut <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -104,7 +187,7 @@ export default function HomePage() {
                   variant="outline"
                   size="lg"
                   className="border-2 border-red-500 text-red-600 hover:bg-red-50 bg-transparent hover:border-red-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-base lg:text-lg"
-                  onClick={() => document.getElementById('map')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById("map")?.scrollIntoView({ behavior: "smooth" })}
                 >
                   Temukan Lokasi Kami
                 </Button>
@@ -112,16 +195,72 @@ export default function HomePage() {
             </div>
 
             <div className="relative mt-8 lg:mt-0">
-              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
-                <img
-                  src="/HomeDashboard.jpg"
-                  alt="Dashboard Utama"
-                  width={700}
-                  height={500}
-                  className="w-full h-auto object-cover"
-                  style={{maxHeight: '500px'}}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              {/* Auto-scrolling Carousel */}
+              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl">
+                <div className="relative h-[400px] lg:h-[500px] overflow-hidden">
+                  {/* Carousel Container */}
+                  <div
+                    className="flex transition-transform duration-1000 ease-in-out h-full"
+                    style={{
+                      transform: `translateX(-${currentImageIndex * 100}%)`,
+                      width: `${carouselImages.length * 100}%`,
+                    }}
+                  >
+                    {carouselImages.map((image, index) => (
+                      <div
+                        key={index}
+                        className="relative flex-shrink-0 w-full h-full"
+                        style={{ width: `${100 / carouselImages.length}%` }}
+                      >
+                        <img
+                          src={image.src || "/placeholder.svg"}
+                          alt={image.alt}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+
+                        {/* Image Title Overlay */}
+                        <div className="absolute bottom-6 left-6 right-6">
+                          <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                            <h3 className="text-gray-900 text-lg font-semibold mb-1">{image.title}</h3>
+                            <p className="text-gray-600 text-sm">{image.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Carousel Indicators */}
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {carouselImages.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          index === currentImageIndex ? "bg-white shadow-lg" : "bg-white/50 hover:bg-white/75"
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1))}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="h-5 w-5 text-gray-700" />
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentImageIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1))}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="h-5 w-5 text-gray-700" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -148,9 +287,11 @@ export default function HomePage() {
                   <Target className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
                 <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Misi Kami</h3>
-                
+
                 <div className="text-gray-600 leading-relaxed text-sm lg:text-base text-justify">
-                  <div className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.mission ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div
+                    className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.mission ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"}`}
+                  >
                     <div className="pb-4 space-y-2">
                       <div>1. Menyadarkan masyarakat akan pentingnya menjaga kebersihan lingkungan.</div>
                       <div>2. Mendukung program pemerintah dalam pengelolaan sampah.</div>
@@ -160,9 +301,9 @@ export default function HomePage() {
                       <div>6. Mengedukasi masyarakat untuk tidak membakar sampah.</div>
                     </div>
                   </div>
-                  
+
                   <button
-                    onClick={() => toggleSection('mission')}
+                    onClick={() => toggleSection("mission")}
                     className="flex items-center justify-center w-full mt-4 text-green-600 hover:text-green-700 transition-colors duration-200 font-medium"
                   >
                     {expandedSections.mission ? (
@@ -186,16 +327,19 @@ export default function HomePage() {
                   <Eye className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
                 <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Visi Kami</h3>
-                
+
                 <div className="text-gray-600 leading-relaxed text-sm lg:text-base">
-                  <div className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.vision ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div
+                    className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.vision ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"}`}
+                  >
                     <div className="pb-4">
-                      Menciptakan lingkungan yang bersih, sehat, dan bebas polusi, serta meningkatkan kesadaran masyarakat terhadap pentingnya pengelolaan sampah yang bijak dan keberlanjutan.
+                      Menciptakan lingkungan yang bersih, sehat, dan bebas polusi, serta meningkatkan kesadaran
+                      masyarakat terhadap pentingnya pengelolaan sampah yang bijak dan keberlanjutan.
                     </div>
                   </div>
-                  
+
                   <button
-                    onClick={() => toggleSection('vision')}
+                    onClick={() => toggleSection("vision")}
                     className="flex items-center justify-center w-full mt-4 text-red-600 hover:text-red-700 transition-colors duration-200 font-medium"
                   >
                     {expandedSections.vision ? (
@@ -219,17 +363,21 @@ export default function HomePage() {
                   <Award className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
                 <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Tujuan Kami</h3>
-                
+
                 <div className="text-gray-600 leading-relaxed text-sm lg:text-base">
-                  <div className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.goals ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div
+                    className={`transition-all duration-700 ease-in-out overflow-hidden ${expandedSections.goals ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"}`}
+                  >
                     <div className="pb-4">
-                      Menyadarkan masyarakat untuk lebih peduli lingkungan. BSMM tidak hanya fokus pada pengelolaan sampah, tetapi juga lingkungan secara umum karena program ini termasuk ke dalam proklim. 
-                      Selain itu, BSMM juga memiliki program untuk memberikan sedekah kepada kaum fakir miskin dan kaum duafa dari sebagian hasil keuntungan.
+                      Menyadarkan masyarakat untuk lebih peduli lingkungan. BSMM tidak hanya fokus pada pengelolaan
+                      sampah, tetapi juga lingkungan secara umum karena program ini termasuk ke dalam proklim. Selain
+                      itu, BSMM juga memiliki program untuk memberikan sedekah kepada kaum fakir miskin dan kaum duafa
+                      dari sebagian hasil keuntungan.
                     </div>
                   </div>
-                  
+
                   <button
-                    onClick={() => toggleSection('goals')}
+                    onClick={() => toggleSection("goals")}
                     className="flex items-center justify-center w-full mt-4 text-green-600 hover:text-green-700 transition-colors duration-200 font-medium"
                   >
                     {expandedSections.goals ? (
@@ -266,14 +414,15 @@ export default function HomePage() {
             Bergabunglah dengan Misi Kami untuk Lingkungan yang Lebih Bersih
           </h2>
           <p className="text-lg sm:text-xl lg:text-2xl text-green-100 mb-8 lg:mb-12 leading-relaxed max-w-4xl mx-auto">
-            Jadilah bagian dari solusi. Pelajari bagaimana Anda dapat berkontribusi pada inisiatif pengelolaan sampah kami dan membantu menciptakan masa depan yang berkelanjutan untuk Kelurahan Tugurejo.
+            Jadilah bagian dari solusi. Pelajari bagaimana Anda dapat berkontribusi pada inisiatif pengelolaan sampah
+            kami dan membantu menciptakan masa depan yang berkelanjutan untuk Kelurahan Tugurejo.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center">
             <Button
               size="lg"
               variant="secondary"
               className="bg-white text-green-600 hover:bg-gray-50 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-base lg:text-lg font-semibold"
-              onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
             >
               Tentang Kami
             </Button>
@@ -281,7 +430,7 @@ export default function HomePage() {
               size="lg"
               variant="outline"
               className="border-2 border-white text-white hover:bg-white hover:text-green-600 bg-transparent shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-base lg:text-lg font-semibold"
-              onClick={() => document.getElementById('health')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById("health")?.scrollIntoView({ behavior: "smooth" })}
             >
               Panduan Kesehatan
             </Button>
@@ -289,7 +438,7 @@ export default function HomePage() {
         </div>
       </section>
 
-              {/* ===== TENTANG KAMI ===== */}
+      {/* ===== TENTANG KAMI ===== */}
       {/* Bagian Hero Tentang Kami */}
       <section id="about" className="relative bg-white py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
@@ -312,7 +461,8 @@ export default function HomePage() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Temukan perjalanan kami, kenali pendiri kami, dan pelajari dampak positif yang kami ciptakan di Kelurahan Tugurejo dan sekitarnya.
+              Temukan perjalanan kami, kenali pengurus kami, dan pelajari dampak positif yang kami ciptakan di Kelurahan
+              Tugurejo dan sekitarnya.
             </p>
           </div>
         </div>
@@ -322,17 +472,102 @@ export default function HomePage() {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            <div className="space-y-6 lg:space-y-8">
+            {/* Carousel - Now on the left */}
+            <div className="relative order-1 lg:order-1">
+              {/* Auto-scrolling Carousel for Sejarah */}
+              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl">
+                <div className="relative h-[350px] lg:h-[450px] overflow-hidden">
+                  {/* Carousel Container */}
+                  <div
+                    className="flex transition-transform duration-1000 ease-in-out h-full"
+                    style={{
+                      transform: `translateX(-${currentSejarahIndex * 100}%)`,
+                      width: `${carouselImages.length * 100}%`,
+                    }}
+                  >
+                    {carouselImages.map((image, index) => (
+                      <div
+                        key={`sejarah-${index}`}
+                        className="relative flex-shrink-0 w-full h-full"
+                        style={{ width: `${100 / carouselImages.length}%` }}
+                      >
+                        <img
+                          src={image.src || "/placeholder.svg"}
+                          alt={`Sejarah - ${image.alt}`}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+
+                        {/* Image Title Overlay */}
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg">
+                            <h4 className="text-gray-900 text-base font-semibold mb-1">{image.title}</h4>
+                            <p className="text-gray-600 text-xs">{image.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Carousel Indicators */}
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1.5">
+                    {carouselImages.map((_, index) => (
+                      <button
+                        key={`sejarah-indicator-${index}`}
+                        onClick={() => setCurrentSejarahIndex(index)}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          index === currentSejarahIndex ? "bg-white shadow-lg" : "bg-white/60 hover:bg-white/80"
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={() =>
+                      setCurrentSejarahIndex((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1))
+                    }
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-300 hover:scale-110"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="h-4 w-4 text-gray-700" />
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      setCurrentSejarahIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1))
+                    }
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-300 hover:scale-110"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="h-4 w-4 text-gray-700" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Text Content - Now on the right */}
+            <div className="space-y-6 lg:space-y-8 order-2 lg:order-2">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Sejarah Kami</h2>
               <div className="space-y-6 text-gray-600 leading-relaxed text-base lg:text-lg">
                 <p className="text-justify">
-                  Bank Sampah Mawar Merah (BSMM) didirikan pada tahun 2010 di Kelurahan Tugurejo, Semarang, sebagai kelanjutan dari program pemberdayaan masyarakat yang sebelumnya dijalankan oleh Badan Keswadayaan Masyarakat (BKM). Tujuan utama BSMM adalah menciptakan lingkungan yang bersih dari sampah sekaligus meningkatkan kesadaran masyarakat akan pentingnya pengelolaan sampah yang bijak.
+                  Bank Sampah Mawar Merah (BSMM) didirikan pada tahun 2010 di Kelurahan Tugurejo, Semarang, sebagai
+                  kelanjutan dari program pemberdayaan masyarakat yang sebelumnya dijalankan oleh Badan Keswadayaan
+                  Masyarakat (BKM). Tujuan utama BSMM adalah menciptakan lingkungan yang bersih dari sampah sekaligus
+                  meningkatkan kesadaran masyarakat akan pentingnya pengelolaan sampah yang bijak.
                 </p>
                 <p className="text-justify">
-                  Awalnya, kondisi lingkungan di Tugurejo cukup memprihatinkan karena kurangnya kesadaran masyarakat terhadap kebersihan. BSMM hadir sebagai solusi dengan memulai kegiatan pemilahan sampah di satu RT. Sampah-sampah kering seperti kardus, plastik, botol, dan kertas dikumpulkan dari rumah ke rumah, dipilah, ditimbang, dan dihargai sesuai jenisnya.
+                  Awalnya, kondisi lingkungan di Tugurejo cukup memprihatinkan karena kurangnya kesadaran masyarakat
+                  terhadap kebersihan. BSMM hadir sebagai solusi dengan memulai kegiatan pemilahan sampah di satu RT.
+                  Sampah-sampah kering seperti kardus, plastik, botol, dan kertas dikumpulkan dari rumah ke rumah,
+                  dipilah, ditimbang, dan dihargai sesuai jenisnya.
                 </p>
                 <p className="text-justify">
-                  Dipimpin oleh Ibu Tatiek sejak awal berdiri, BSMM dikelola oleh 11 anggota aktif hingga kini. Meski awalnya tidak mudah mengajak warga bergabung, sosialisasi dan bukti nyata manfaatnya membuat jumlah partisipasi meningkat pesat dari 58 Kartu Keluarga menjadi 599 KK yang tersebar di RW 1 dan RW 5.
+                  Dipimpin oleh Ibu Tatiek sejak awal berdiri, BSMM dikelola oleh 11 anggota aktif hingga kini. Meski
+                  awalnya tidak mudah mengajak warga bergabung, sosialisasi dan bukti nyata manfaatnya membuat jumlah
+                  partisipasi meningkat pesat dari 58 Kartu Keluarga menjadi 599 KK yang tersebar di RW 1 dan RW 5.
                 </p>
               </div>
 
@@ -347,17 +582,6 @@ export default function HomePage() {
                   <div className="text-sm lg:text-base text-gray-700">Kartu Keluarga berpartisipasi</div>
                 </div>
               </div>
-            </div>
-
-            <div className="relative mt-8 lg:mt-0">
-              <AnimatedTestimonials
-                testimonials={[
-                  { quote: "", name: "", designation: "", src: "/HomeImg1.jpg" },
-                  { quote: "", name: "", designation: "", src: "/HomeImg2.jpg" },
-                  { quote: "", name: "", designation: "", src: "/HomeImg3.jpg" },
-                ]}
-                autoplay={true}
-              />
             </div>
           </div>
         </div>
@@ -376,14 +600,14 @@ export default function HomePage() {
           {/* Kontrol Slider */}
           <div className="flex justify-between items-center mb-8">
             <button
-              onClick={() => scroll('left')}
+              onClick={() => scroll("left")}
               className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 text-gray-600 hover:text-green-600"
               disabled={scrollPosition <= 0}
             >
               <ChevronLeft className="h-6 w-6" />
             </button>
             <button
-              onClick={() => scroll('right')}
+              onClick={() => scroll("right")}
               className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 text-gray-600 hover:text-green-600"
             >
               <ChevronRight className="h-6 w-6" />
@@ -391,10 +615,10 @@ export default function HomePage() {
           </div>
 
           {/* Kontainer Kartu yang Dapat Digeser */}
-          <div 
+          <div
             ref={scrollRef}
             className="flex gap-6 overflow-x-auto scrollbar-hide pb-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {pengurus.map((person, index) => (
               <Card
@@ -406,7 +630,7 @@ export default function HomePage() {
                     <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 overflow-hidden">
                       {person.photo ? (
                         <img
-                          src={person.photo}
+                          src={person.photo || "/placeholder.svg"}
                           alt={`Foto ${person.name}`}
                           className="w-full h-full object-cover rounded-full"
                         />
@@ -433,118 +657,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Program (Dampak Lingkungan) */}
-      <section className="py-16 lg:py-24 bg-white">
+      {/* Program Kami - Completely Replaced with ExpandableCardDemo */}
+      <section className="py-16 lg:py-24 bg-gradient-to-br from-green-50 via-white to-red-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 lg:mb-20">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
-              Program Kami
-            </h2>
-            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
-              Program-program yang kami jalankan untuk lingkungan yang lebih baik.
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">Program Kami</h2>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-4xl mx-auto">
+              Berbagai program yang kami jalankan untuk mendukung lingkungan yang lebih bersih dan pemberdayaan
+              masyarakat di Kelurahan Tugurejo. Klik pada setiap program untuk mempelajari lebih detail.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-16">
-            <div className="space-y-6 lg:space-y-8">
-              <h3 className="text-2xl lg:text-3xl font-bold text-green-600">Program Lingkungan</h3>
-              <div className="space-y-6">
-                <div className="bg-green-50 p-6 rounded-xl border border-green-100">
-                  <p className="text-gray-700 text-base lg:text-lg leading-relaxed text-justify">
-                    Program Bank Sampah Mawar Merah bertujuan menyadarkan masyarakat untuk lebih peduli lingkungan. BSMM tidak hanya fokus pada pengelolaan sampah, tetapi juga lingkungan secara umum karena program ini termasuk ke dalam proklim.
-                  </p>
-                </div>
-                <div className="bg-red-50 p-6 rounded-xl border border-red-100">
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-red-100 p-3 rounded-xl">
-                      <Heart className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 text-base lg:text-lg mb-2">Program Sosial</h4>
-                      <p className="text-gray-600 text-sm lg:text-base leading-relaxed">
-                        BSMM juga memiliki program untuk memberikan sedekah kepada kaum fakir miskin dan kaum duafa dari sebagian hasil keuntungan.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative">
-              <AnimatedTestimonials
-                testimonials={[
-                  { quote: "", name: "", designation: "", src: "/Program1.jpg" },
-                  { quote: "", name: "", designation: "", src: "/Program2.jpg" },
-                  { quote: "", name: "", designation: "", src: "/Program3.jpg" },
-                  { quote: "", name: "", designation: "", src: "/Program4.jpg" },
-                ]}
-                autoplay={true}
-              />
-            </div>
-          </div>
+          <ExpandableCardDemo />
         </div>
       </section>
 
-      {/* Kegiatan (Dampak Komunitas) */}
-      <section className="py-16 lg:py-24 bg-white">
+      {/* Kegiatan Kami - Using FocusCards */}
+      <section className="py-16 lg:py-24 bg-gradient-to-br from-green-50 via-white to-red-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 lg:mb-20">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">Kegiatan Kami</h2>
-            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
-              Berbagai kegiatan yang kami lakukan untuk mendukung program lingkungan.
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-4xl mx-auto">
+              Berbagai kegiatan yang kami lakukan untuk mendukung program lingkungan dan pemberdayaan masyarakat di
+              Kelurahan Tugurejo.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            <div className="relative order-2 lg:order-1">
-              <AnimatedTestimonials
-                testimonials={[
-                  { quote: "", name: "", designation: "", src: "/Kegiatan1.jpg" },
-                  { quote: "", name: "", designation: "", src: "/Kegiatan2.jpg" },
-                  { quote: "", name: "", designation: "", src: "/Kegiatan3.jpg" },
-                ]}
-                autoplay={true}
-              />
-            </div>
-
-            <div className="space-y-6 lg:space-y-8 order-1 lg:order-2">
-              <h3 className="text-2xl lg:text-3xl font-bold text-red-600">Kegiatan Rutin</h3>
-              <div className="space-y-6">
-                {[
-                  {
-                    icon: Users,
-                    title: "Sosialisasi Lingkungan",
-                    description: "Sosialisasi mengenai pentingnya menjaga lingkungan, mengelola sampah, dan pentingnya memanfaatkan lahan terbatas untuk menanam tanaman.",
-                  },
-                  {
-                    icon: Recycle,
-                    title: "Kerajinan dari Limbah",
-                    description: "Membuat ketrampilan dari limbah yang kemudian bisa dijual atau untuk kebutuhan pribadi.",
-                  },
-                  {
-                    icon: Calendar,
-                    title: "Gerebek Sampah",
-                    description: "Gerebek sampah di laut sebagai upaya pembersihan lingkungan.",
-                  },
-                  {
-                    icon: Award,
-                    title: "Pengelolaan Sampah",
-                    description: "Kupas tuntas dari hasil pilah sampah yang disetor ke BSMM, kemudian dijual kepada pengepul.",
-                  },
-                ].map((item, index) => (
-                  <div key={index} className="flex items-start space-x-4 group">
-                    <div className="bg-red-100 p-3 rounded-xl group-hover:bg-red-200 transition-colors duration-300">
-                      <item.icon className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 text-base lg:text-lg mb-2">{item.title}</h4>
-                      <p className="text-gray-600 text-sm lg:text-base leading-relaxed">{item.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <FocusCardsDemo />
         </div>
       </section>
 
@@ -552,14 +691,13 @@ export default function HomePage() {
       <section className="py-16 lg:py-24 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 lg:mb-20">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
-              Video Preview
-            </h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">Video Preview</h2>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-4xl mx-auto">
-              Lihat bagaimana Bank Sampah Mawar Merah mengubah lingkungan Tugurejo menjadi lebih bersih dan berkelanjutan.
+              Lihat bagaimana Bank Sampah Mawar Merah mengubah lingkungan Tugurejo menjadi lebih bersih dan
+              berkelanjutan.
             </p>
           </div>
-          
+
           <div className="relative">
             {/* Kontainer Video dengan gaya Apple-like */}
             <div className="relative mx-auto max-w-4xl">
@@ -572,21 +710,23 @@ export default function HomePage() {
                       <div className="w-0 h-0 border-l-[12px] border-l-green-600 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-1 group-hover:scale-110 transition-transform duration-300"></div>
                     </div>
                   </div>
-                  
+
                   {/* Teks Overlay Video */}
                   <div className="absolute bottom-6 left-6 right-6">
                     <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
                       <h3 className="text-gray-900 text-lg font-semibold mb-2">Bank Sampah Mawar Merah</h3>
-                      <p className="text-gray-600 text-sm">Mengubah sampah menjadi berkah untuk lingkungan yang lebih baik</p>
+                      <p className="text-gray-600 text-sm">
+                        Mengubah sampah menjadi berkah untuk lingkungan yang lebih baik
+                      </p>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Elemen Dekoratif */}
                 <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full opacity-30"></div>
                 <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full opacity-30"></div>
               </div>
-              
+
               {/* Statistik Mengambang */}
               <div className="absolute -top-8 -right-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-green-200 shadow-lg">
                 <div className="text-center">
@@ -594,7 +734,7 @@ export default function HomePage() {
                   <div className="text-sm text-gray-600">Kartu Keluarga</div>
                 </div>
               </div>
-              
+
               <div className="absolute -bottom-8 -left-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-red-200 shadow-lg">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-red-600">{selisihTahun}</div>
@@ -603,7 +743,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          
+
           {/* Ajakan Bertindak */}
           <div className="text-center mt-12">
             <button className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
@@ -613,7 +753,7 @@ export default function HomePage() {
         </div>
       </section>
 
-              {/* ===== BAGIAN KESEHATAN ===== */}
+      {/* ===== BAGIAN KESEHATAN ===== */}
       {/* Bagian Hero Kesehatan */}
       <section id="health" className="relative bg-white py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
@@ -632,7 +772,8 @@ export default function HomePage() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Keselamatan Anda adalah prioritas kami. Pelajari tentang tindakan pencegahan kesehatan dan langkah-langkah keselamatan untuk kegiatan pengelolaan sampah.
+              Keselamatan Anda adalah prioritas kami. Pelajari tentang tindakan pencegahan kesehatan dan langkah-langkah
+              keselamatan untuk kegiatan pengelolaan sampah.
             </p>
           </div>
         </div>
@@ -644,7 +785,9 @@ export default function HomePage() {
           <Alert className="border-red-200 bg-gradient-to-r from-red-50 to-red-100 shadow-lg">
             <AlertTriangle className="h-5 w-5 text-red-600" />
             <AlertDescription className="text-red-800 text-base lg:text-lg">
-              <strong>Penting:</strong> Selalu ikuti panduan keselamatan ini saat menangani bahan sampah. Jika Anda merasa tidak enak badan atau mengalami gejala setelah kegiatan penanganan sampah, segera cari pertolongan medis.
+              <strong>Penting:</strong> Selalu ikuti panduan keselamatan ini saat menangani bahan sampah. Jika Anda
+              merasa tidak enak badan atau mengalami gejala setelah kegiatan penanganan sampah, segera cari pertolongan
+              medis.
             </AlertDescription>
           </Alert>
         </div>
@@ -842,9 +985,7 @@ export default function HomePage() {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 lg:mb-20">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
-              Prosedur Darurat
-            </h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">Prosedur Darurat</h2>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed">
               Ketahui apa yang harus dilakukan dalam kasus kecelakaan atau keadaan darurat kesehatan.
             </p>
@@ -901,11 +1042,10 @@ export default function HomePage() {
               </CardContent>
             </Card>
           </div>
-
         </div>
       </section>
 
-              {/* ===== BAGIAN PETA ===== */}
+      {/* ===== BAGIAN PETA ===== */}
       {/* Bagian Hero Peta */}
       <section id="map" className="relative bg-white py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
@@ -928,7 +1068,8 @@ export default function HomePage() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Kunjungi lokasi kami di Kelurahan Tugurejo atau hubungi kami untuk informasi lebih lanjut tentang program pengelolaan sampah dan layanan kami.
+              Kunjungi lokasi kami di Kelurahan Tugurejo atau hubungi kami untuk informasi lebih lanjut tentang program
+              pengelolaan sampah dan layanan kami.
             </p>
           </div>
         </div>
