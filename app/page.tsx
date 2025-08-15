@@ -1,5 +1,4 @@
 "use client"
-import type React from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -133,12 +132,6 @@ export default function HomePage() {
     window.open("https://share.google/xvDwEqb8Zyaq5kfky", "_blank", "noopener,noreferrer")
   }
 
-  // Image error handler
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    const target = e.target as HTMLImageElement
-    target.src = "/placeholder.svg?height=400&width=600&text=Image+Not+Found"
-  }
-
   return (
     <div className="min-h-screen pt-16 lg:pt-20">
       {/* ===== BAGIAN UTAMA ===== */}
@@ -209,7 +202,10 @@ export default function HomePage() {
                             src={image.src || "/placeholder.svg"}
                             alt={image.alt}
                             className="w-full h-full object-cover"
-                            onError={handleImageError}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.src = "/placeholder.svg?height=400&width=600&text=Image+Not+Found"
+                            }}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
@@ -456,7 +452,10 @@ export default function HomePage() {
                             alt={`Sejarah - ${image.alt}`}
                             className="w-full h-full object-cover"
                             loading="lazy"
-                            onError={handleImageError}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.src = "/placeholder.svg?height=400&width=600&text=Image+Not+Found"
+                            }}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
@@ -562,7 +561,10 @@ export default function HomePage() {
                           src={person.photo || "/placeholder.svg"}
                           alt={`Foto ${person.name}`}
                           className="w-full h-full object-cover rounded-full"
-                          onError={handleImageError}
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.src = "/placeholder.svg?height=96&width=96&text=Photo"
+                          }}
                         />
                       ) : (
                         <User className="h-12 w-12 text-gray-400" />
@@ -744,7 +746,10 @@ export default function HomePage() {
                   width={700}
                   height={500}
                   className="w-full h-auto"
-                  onError={handleImageError}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = "/placeholder.svg?height=500&width=700&text=APD+Guidelines"
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -904,7 +909,10 @@ export default function HomePage() {
                   width={700}
                   height={500}
                   className="w-full h-auto"
-                  onError={handleImageError}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = "/placeholder.svg?height=500&width=700&text=Hand+Washing+Guide"
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -1025,7 +1033,10 @@ export default function HomePage() {
                       src="/PetaBankSampah.jpg"
                       alt="Peta Lokasi Bank Sampah Mawar Merah di Kelurahan Tugurejo"
                       className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
-                      onError={handleImageError}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = "/placeholder.svg?height=400&width=600&text=Map+Location"
+                      }}
                     />
 
                     {/* Subtle gradient overlay for better text readability */}

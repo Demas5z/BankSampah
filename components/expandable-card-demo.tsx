@@ -1,15 +1,8 @@
 "use client"
 
-import type React from "react"
-
 import { useEffect, useId, useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { useOutsideClick } from "@/hooks/use-outside-click"
-
-const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-  const target = e.target as HTMLImageElement
-  target.src = "/placeholder.svg?height=200&width=200&text=Image+Not+Found"
-}
 
 export default function ExpandableCardDemo() {
   const [active, setActive] = useState<(typeof cards)[number] | boolean | null>(null)
@@ -87,7 +80,10 @@ export default function ExpandableCardDemo() {
                   src={active.src || "/placeholder.svg"}
                   alt={active.title}
                   className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
-                  onError={handleImageError}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = "/placeholder.svg?height=200&width=200&text=Image+Not+Found"
+                  }}
                 />
               </motion.div>
 
@@ -158,7 +154,10 @@ export default function ExpandableCardDemo() {
                   src={card.src || "/placeholder.svg"}
                   alt={card.title}
                   className="h-40 w-40 md:h-14 md:w-14 rounded-lg object-cover object-top"
-                  onError={handleImageError}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = "/placeholder.svg?height=100&width=100&text=Image+Not+Found"
+                  }}
                 />
               </motion.div>
               <div className="">
