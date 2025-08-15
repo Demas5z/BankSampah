@@ -1,4 +1,5 @@
 "use client"
+import type React from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -39,13 +40,12 @@ export default function HomePage() {
   const [scrollPosition, setScrollPosition] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Perbaiki error hydration dengan menggunakan useEffect untuk kalkulasi dinamis
-  const [selisihTahun, setSelisihTahun] = useState<number>(0)
+  // Fixed hydration issue by using static year
+  const [selisihTahun, setSelisihTahun] = useState<number>(14) // 2024 - 2010 = 14
   const tahunBerdiriAwal = 2010
 
   // Autoplay plugin for carousels
   const autoplayPlugin = useRef(Autoplay({ delay: 4000, stopOnInteraction: true }))
-
   const sejarahAutoplayPlugin = useRef(Autoplay({ delay: 4500, stopOnInteraction: true }))
 
   const carouselImages = [
@@ -87,6 +87,7 @@ export default function HomePage() {
     },
   ]
 
+  // Update year calculation on client side only
   useEffect(() => {
     const tahunSaatIni = new Date().getFullYear()
     setSelisihTahun(tahunSaatIni - tahunBerdiriAwal)
@@ -130,6 +131,12 @@ export default function HomePage() {
   // Function to open Google Maps directions
   const openGoogleMapsDirections = () => {
     window.open("https://share.google/xvDwEqb8Zyaq5kfky", "_blank", "noopener,noreferrer")
+  }
+
+  // Image error handler
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.target as HTMLImageElement
+    target.src = "/placeholder.svg?height=400&width=600&text=Image+Not+Found"
   }
 
   return (
@@ -202,6 +209,7 @@ export default function HomePage() {
                             src={image.src || "/placeholder.svg"}
                             alt={image.alt}
                             className="w-full h-full object-cover"
+                            onError={handleImageError}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
@@ -448,6 +456,7 @@ export default function HomePage() {
                             alt={`Sejarah - ${image.alt}`}
                             className="w-full h-full object-cover"
                             loading="lazy"
+                            onError={handleImageError}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
@@ -553,6 +562,7 @@ export default function HomePage() {
                           src={person.photo || "/placeholder.svg"}
                           alt={`Foto ${person.name}`}
                           className="w-full h-full object-cover rounded-full"
+                          onError={handleImageError}
                         />
                       ) : (
                         <User className="h-12 w-12 text-gray-400" />
@@ -734,6 +744,7 @@ export default function HomePage() {
                   width={700}
                   height={500}
                   className="w-full h-auto"
+                  onError={handleImageError}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -893,6 +904,7 @@ export default function HomePage() {
                   width={700}
                   height={500}
                   className="w-full h-auto"
+                  onError={handleImageError}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -1013,6 +1025,7 @@ export default function HomePage() {
                       src="/PetaBankSampah.jpg"
                       alt="Peta Lokasi Bank Sampah Mawar Merah di Kelurahan Tugurejo"
                       className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+                      onError={handleImageError}
                     />
 
                     {/* Subtle gradient overlay for better text readability */}

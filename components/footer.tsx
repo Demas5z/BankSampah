@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone, Recycle, Heart, Leaf } from "lucide-react"
+import { Mail, MapPin, Phone, Heart, Leaf } from "lucide-react"
 import Link from "next/link"
 
 export default function Footer() {
@@ -24,6 +24,10 @@ export default function Footer() {
                   src="/logoBSMM.png"
                   alt="Logo Bank Sampah Mawar Merah"
                   className="h-8 w-8 object-contain"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = "/placeholder.svg?height=32&width=32&text=Logo"
+                  }}
                 />
               </div>
               <div>
@@ -32,7 +36,8 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-green-100 text-sm lg:text-base leading-relaxed">
-              Berkomitmen untuk menciptakan lingkungan yang lebih bersih melalui pengelolaan sampah berbasis komunitas dan program daur ulang yang bermanfaat bagi komunitas dan generasi mendatang.
+              Berkomitmen untuk menciptakan lingkungan yang lebih bersih melalui pengelolaan sampah berbasis komunitas
+              dan program daur ulang yang bermanfaat bagi komunitas dan generasi mendatang.
             </p>
             <div className="flex items-center space-x-2 text-green-200">
               <Heart className="h-5 w-5 text-red-400" />
@@ -71,7 +76,7 @@ export default function Footer() {
                 <MapPin className="h-5 w-5 text-green-300 mt-1 group-hover:text-white transition-colors duration-300" />
                 <div>
                   <span className="text-green-100 text-sm lg:text-base leading-relaxed group-hover:text-white transition-colors duration-300">
-                  Jalan Tugurejo Raya Komplek Kelurahan Kelurahan Tugurejo,
+                    Jalan Tugurejo Raya Komplek Kelurahan Kelurahan Tugurejo,
                     <br />
                     Kecamatan Tugu Kota Semarang, Jawa Tengah 50185 Indonesia
                   </span>
@@ -110,7 +115,7 @@ export default function Footer() {
 
         <div className="border-t border-green-600/30 mt-12 pt-8 text-center">
           <p className="text-green-200 text-sm lg:text-base">
-            © {new Date().getFullYear()} Bank Sampah Mawar Merah. Semua hak dilindungi. Dibuat dengan{" "}
+            © 2024 Bank Sampah Mawar Merah. Semua hak dilindungi. Dibuat dengan{" "}
             <Heart className="inline h-4 w-4 text-red-400 mx-1" />
             untuk lingkungan kami.
           </p>

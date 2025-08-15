@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
+import ErrorBoundary from "@/components/error-boundary"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -12,7 +13,25 @@ export const metadata: Metadata = {
   description:
     "Community-based waste management and recycling programs in Tugurejo Village, Semarang. Creating a cleaner environment through sustainable practices.",
   keywords: "waste management, recycling, environment, community, Tugurejo, Semarang, Bank Sampah",
-    generator: 'v0.dev'
+  authors: [{ name: "Bank Sampah Mawar Merah" }],
+  creator: "Bank Sampah Mawar Merah",
+  publisher: "Bank Sampah Mawar Merah",
+  robots: "index, follow",
+  openGraph: {
+    title: "Bank Sampah Mawar Merah - Waste Management Tugurejo Village",
+    description: "Community-based waste management and recycling programs in Tugurejo Village, Semarang.",
+    url: "https://banksampahmawarmerah.org",
+    siteName: "Bank Sampah Mawar Merah",
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bank Sampah Mawar Merah - Waste Management Tugurejo Village",
+    description: "Community-based waste management and recycling programs in Tugurejo Village, Semarang.",
+  },
+  viewport: "width=device-width, initial-scale=1",
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -21,11 +40,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="id">
       <body className={inter.className}>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <ErrorBoundary>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </ErrorBoundary>
       </body>
     </html>
   )

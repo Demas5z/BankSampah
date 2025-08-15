@@ -1,8 +1,15 @@
 "use client"
 
+import type React from "react"
+
 import { useEffect, useId, useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { useOutsideClick } from "@/hooks/use-outside-click"
+
+const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const target = e.target as HTMLImageElement
+  target.src = "/placeholder.svg?height=200&width=200&text=Image+Not+Found"
+}
 
 export default function ExpandableCardDemo() {
   const [active, setActive] = useState<(typeof cards)[number] | boolean | null>(null)
@@ -12,7 +19,7 @@ export default function ExpandableCardDemo() {
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        setActive(false)
+        setActive(null)
       }
     }
 
@@ -23,7 +30,10 @@ export default function ExpandableCardDemo() {
     }
 
     window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
+    return () => {
+      window.removeEventListener("keydown", onKeyDown)
+      document.body.style.overflow = "auto"
+    }
   }, [active])
 
   useOutsideClick(ref, () => setActive(null))
@@ -36,29 +46,25 @@ export default function ExpandableCardDemo() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
             className="fixed inset-0 bg-black/20 h-full w-full z-10"
           />
         )}
       </AnimatePresence>
       <AnimatePresence>
         {active && typeof active === "object" ? (
-          <div className="fixed inset-0 grid place-items-center z-[100]">
+          <div
+            className="fixed inset-0 grid place-items-center z-[100] p-4"
+            role="region"
+            aria-label="Expandable program cards"
+          >
             <motion.button
               key={`button-${active.title}-${id}`}
               layout
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-                transition: {
-                  duration: 0.05,
-                },
-              }}
-              className="flex absolute top-2 right-2 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.05 } }}
+              className="flex absolute top-2 right-2 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6 z-10"
               onClick={() => setActive(null)}
             >
               <CloseIcon />
@@ -67,6 +73,12 @@ export default function ExpandableCardDemo() {
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
               className="w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                mass: 0.8,
+              }}
             >
               <motion.div layoutId={`image-${active.title}-${id}`}>
                 <img
@@ -75,21 +87,22 @@ export default function ExpandableCardDemo() {
                   src={active.src || "/placeholder.svg"}
                   alt={active.title}
                   className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
+                  onError={handleImageError}
                 />
               </motion.div>
 
               <div>
                 <div className="flex justify-between items-start p-4">
-                  <div className="">
+                  <div className="flex-1 pr-4">
                     <motion.h3
                       layoutId={`title-${active.title}-${id}`}
-                      className="font-bold text-neutral-700 dark:text-neutral-200"
+                      className="font-bold text-neutral-700 dark:text-neutral-200 text-xl"
                     >
                       {active.title}
                     </motion.h3>
                     <motion.p
                       layoutId={`description-${active.description}-${id}`}
-                      className="text-neutral-600 dark:text-neutral-400"
+                      className="text-neutral-600 dark:text-neutral-400 mt-2"
                     >
                       {active.description}
                     </motion.p>
@@ -99,7 +112,7 @@ export default function ExpandableCardDemo() {
                     layoutId={`button-${active.title}-${id}`}
                     href={active.ctaLink}
                     target="_blank"
-                    className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white hover:bg-green-600 transition-colors duration-200"
+                    className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white hover:bg-green-600 transition-colors duration-200 flex-shrink-0"
                     rel="noreferrer"
                   >
                     {active.ctaText}
@@ -108,9 +121,10 @@ export default function ExpandableCardDemo() {
                 <div className="pt-4 relative px-4">
                   <motion.div
                     layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
                     className="text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
                   >
                     {typeof active.content === "function" ? active.content() : active.content}
@@ -128,8 +142,15 @@ export default function ExpandableCardDemo() {
             key={`card-${card.title}-${id}`}
             onClick={() => setActive(card)}
             className="p-4 flex flex-col md:flex-row justify-between items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-all duration-200"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 25,
+            }}
           >
-            <div className="flex gap-4 flex-col md:flex-row ">
+            <div className="flex gap-4 flex-col md:flex-row">
               <motion.div layoutId={`image-${card.title}-${id}`}>
                 <img
                   width={100}
@@ -137,6 +158,7 @@ export default function ExpandableCardDemo() {
                   src={card.src || "/placeholder.svg"}
                   alt={card.title}
                   className="h-40 w-40 md:h-14 md:w-14 rounded-lg object-cover object-top"
+                  onError={handleImageError}
                 />
               </motion.div>
               <div className="">
@@ -170,18 +192,9 @@ export default function ExpandableCardDemo() {
 export const CloseIcon = () => {
   return (
     <motion.svg
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-      }}
-      exit={{
-        opacity: 0,
-        transition: {
-          duration: 0.05,
-        },
-      }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.05 } }}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -210,10 +223,10 @@ const cards = [
     content: () => {
       return (
         <p>
-          Program pemilahan sampah dilaksanakan setiap hari Sabtu dan Minggu. Kegiatan ini bertujuan untuk
-          meningkatkan kesadaran masyarakat tentang pengelolaan sampah yang bijak. <br /> <br />
-          Program ini dilaksanakan di berbagai RT atau biasa disebut Dawis. Kegiatan ini dilakukan oleh para pengurus dan kader lingkungan
-          yang bertugas untuk membantu masyarakat dalam memilah sampah.
+          Program pemilahan sampah dilaksanakan setiap hari Sabtu dan Minggu. Kegiatan ini bertujuan untuk meningkatkan
+          kesadaran masyarakat tentang pengelolaan sampah yang bijak. <br /> <br />
+          Program ini dilaksanakan di berbagai RT atau biasa disebut Dawis. Kegiatan ini dilakukan oleh para pengurus
+          dan kader lingkungan yang bertugas untuk membantu masyarakat dalam memilah sampah.
         </p>
       )
     },
@@ -227,11 +240,11 @@ const cards = [
     content: () => {
       return (
         <p>
-        Kegiatan sosialisasi mengenai sampah dan lingkungan dilakukan ketika ada kegiatan besar seperti Hari
-        Nasional Lingkungan Hidup, Hari Nasional Lingkungan Hidup Nasional, dan lainnya. Kegiatan ini bertujuan untuk
-        meningkatkan kesadaran masyarakat tentang pengelolaan sampah yang bijak. <br /> <br />
-        Kegiatan ini dilakukan oleh para pengurus dan kader lingkungan yang bertugas untuk membantu masyarakat dalam
-        memilah sampah.
+          Kegiatan sosialisasi mengenai sampah dan lingkungan dilakukan ketika ada kegiatan besar seperti Hari Nasional
+          Lingkungan Hidup, Hari Nasional Lingkungan Hidup Nasional, dan lainnya. Kegiatan ini bertujuan untuk
+          meningkatkan kesadaran masyarakat tentang pengelolaan sampah yang bijak. <br /> <br />
+          Kegiatan ini dilakukan oleh para pengurus dan kader lingkungan yang bertugas untuk membantu masyarakat dalam
+          memilah sampah.
         </p>
       )
     },
@@ -245,9 +258,11 @@ const cards = [
     content: () => {
       return (
         <p>
-        Kegiatan grebek sampah di mangrove dilakukan ketika ada kesempatan seperti Hari Nasional Lingkungan Hidup, Hari
-        Nasional Lingkungan Hidup Nasional, dan lainnya. Kegiatan ini bertujuan untuk membersihkan lingkungan wisata mangrove dari sampah. <br /> <br />
-        Kegiatan ini dilakukan oleh para pengurus yang bertugas untuk membantu masyarakat dalam membersihkan lingkungan wisata mangrove.
+          Kegiatan grebek sampah di mangrove dilakukan ketika ada kesempatan seperti Hari Nasional Lingkungan Hidup,
+          Hari Nasional Lingkungan Hidup Nasional, dan lainnya. Kegiatan ini bertujuan untuk membersihkan lingkungan
+          wisata mangrove dari sampah. <br /> <br />
+          Kegiatan ini dilakukan oleh para pengurus yang bertugas untuk membantu masyarakat dalam membersihkan
+          lingkungan wisata mangrove.
         </p>
       )
     },

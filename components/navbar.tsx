@@ -1,6 +1,6 @@
 "use client"
 
-import { Menu, Recycle, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 
@@ -12,8 +12,21 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
     }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+
+    // Throttle scroll events for better performance
+    let ticking = false
+    const throttledHandleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll()
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+
+    window.addEventListener("scroll", throttledHandleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", throttledHandleScroll)
   }, [])
 
   const navItems = [
@@ -24,15 +37,19 @@ export default function Navbar() {
   ]
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId.replace('#', ''))
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+    try {
+      const element = document.getElementById(sectionId.replace("#", ""))
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" })
+      }
+    } catch (error) {
+      console.warn("Failed to scroll to section:", sectionId)
     }
     setIsOpen(false)
   }
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
@@ -45,16 +62,9 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16 lg:h-20">
           {/* Logo */}
           <div className="flex-1 flex items-center ml-4">
-            <button 
-              onClick={scrollToTop}
-              className="flex items-center space-x-3 group cursor-pointer"
-            >
+            <button onClick={scrollToTop} className="flex items-center space-x-3 group cursor-pointer">
               <div className="bg-white p-2.5 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                <img
-                  src="/logoBSMM.png"
-                  alt="Logo Bank Sampah Mawar Merah"
-                  className="h-6 w-6 object-contain"
-                />
+                <img src="/logoBSMM.png" alt="Logo Bank Sampah Mawar Merah" className="h-6 w-6 object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-green-800 text-lg lg:text-xl">Bank Sampah</span>

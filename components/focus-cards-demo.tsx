@@ -1,3 +1,4 @@
+import type React from "react"
 import { FocusCards } from "@/components/ui/focus-cards"
 
 export default function FocusCardsDemo() {
@@ -28,5 +29,20 @@ export default function FocusCardsDemo() {
     },
   ]
 
-  return <FocusCards cards={cards} />
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.target as HTMLImageElement
+    target.src = "/placeholder.svg?height=400&width=600&text=Activity+Image"
+  }
+
+  return (
+    <FocusCards
+      cards={cards.map((card) => ({
+        ...card,
+        role: "button",
+        tabIndex: 0,
+        ariaLabel: `View details for ${card.title}`,
+        onError: handleImageError,
+      }))}
+    />
+  )
 }
