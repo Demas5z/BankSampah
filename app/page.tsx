@@ -127,6 +127,11 @@ export default function HomePage() {
     }
   }
 
+  // Function to open Google Maps directions
+  const openGoogleMapsDirections = () => {
+    window.open("https://share.google/xvDwEqb8Zyaq5kfky", "_blank", "noopener,noreferrer")
+  }
+
   return (
     <div className="min-h-screen pt-16 lg:pt-20">
       {/* ===== BAGIAN UTAMA ===== */}
@@ -998,12 +1003,9 @@ export default function HomePage() {
             <div className="space-y-6">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Lokasi Kami</h2>
 
-              {/* Enhanced Map Container */}
+              {/* Enhanced Map Container - Removed red/green shadows */}
               <div className="relative group">
-                {/* Decorative background elements */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-green-600 via-green-500 to-red-600 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-
-                {/* Main map container */}
+                {/* Main map container - Clean version without colored shadows */}
                 <div className="relative bg-white rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 border border-gray-100">
                   {/* Map image with aspect ratio preservation */}
                   <div className="relative aspect-[16/10] lg:aspect-[4/3] overflow-hidden">
@@ -1013,8 +1015,8 @@ export default function HomePage() {
                       className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
                     />
 
-                    {/* Gradient overlay for better text readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+                    {/* Subtle gradient overlay for better text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
 
                     {/* Location marker overlay */}
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -1045,9 +1047,6 @@ export default function HomePage() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Interactive border effect */}
-                  <div className="absolute inset-0 rounded-2xl lg:rounded-3xl border-2 border-transparent bg-gradient-to-r from-green-600 via-transparent to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                 </div>
 
                 {/* Floating stats */}
@@ -1059,9 +1058,12 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Action buttons */}
+              {/* Action buttons with Google Maps functionality */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex-1 py-6 text-base lg:text-lg">
+                <Button
+                  onClick={openGoogleMapsDirections}
+                  className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex-1 py-6 text-base lg:text-lg"
+                >
                   <MapPin className="mr-2 h-5 w-5" />
                   Dapatkan Petunjuk Arah
                 </Button>
@@ -1075,7 +1077,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Informasi Kontak - keep existing content */}
+            {/* Informasi Kontak */}
             <div className="space-y-6">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Informasi Kontak</h2>
               <div className="space-y-6">
