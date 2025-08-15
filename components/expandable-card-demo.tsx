@@ -202,116 +202,52 @@ export const CloseIcon = () => {
 
 const cards = [
   {
-    description: "Program Pemberdayaan Masyarakat",
-    title: "Pemberdayaan Komunitas",
+    description: "Dilakukan Setiap Hari Sabtu & Minggu",
+    title: "Pilah Sampah",
     src: "/Program1.jpg",
-    ctaText: "Pelajari",
+    ctaText: "Detail",
     ctaLink: "#",
     content: () => {
       return (
         <p>
-          Program pemberdayaan komunitas Bank Sampah Mawar Merah bertujuan untuk meningkatkan kesadaran masyarakat
-          tentang pengelolaan sampah yang bijak. Melalui program ini, kami mengajak warga untuk berpartisipasi aktif
-          dalam kegiatan pemilahan sampah dari rumah ke rumah. <br /> <br />
-          Program ini telah berhasil mengubah pola pikir masyarakat Tugurejo, dari yang awalnya kurang peduli terhadap
-          kebersihan lingkungan menjadi lebih sadar akan pentingnya menjaga kelestarian lingkungan. Dengan melibatkan
-          599 Kartu Keluarga, program ini telah memberikan dampak positif yang signifikan bagi lingkungan dan ekonomi
-          masyarakat.
+          Program pemilahan sampah dilaksanakan setiap hari Sabtu dan Minggu. Kegiatan ini bertujuan untuk
+          meningkatkan kesadaran masyarakat tentang pengelolaan sampah yang bijak. <br /> <br />
+          Program ini dilaksanakan di berbagai RT atau biasa disebut Dawis. Kegiatan ini dilakukan oleh para pengurus dan kader lingkungan
+          yang bertugas untuk membantu masyarakat dalam memilah sampah.
         </p>
       )
     },
   },
   {
-    description: "Kegiatan Gotong Royong Lingkungan",
-    title: "Gotong Royong Lingkungan",
+    description: "Dilakukan ketika ada kegiatan besar",
+    title: "Sosialisasi mengenai Sampah dan Lingkungan",
     src: "/Program2.jpg",
-    ctaText: "Pelajari",
+    ctaText: "Detail",
     ctaLink: "#",
     content: () => {
       return (
         <p>
-          Kegiatan gotong royong lingkungan merupakan salah satu program unggulan Bank Sampah Mawar Merah yang
-          melibatkan seluruh lapisan masyarakat. Program ini dilaksanakan secara rutin untuk membersihkan lingkungan
-          sekitar dan memilah sampah bersama-sama. <br /> <br />
-          Melalui kegiatan ini, masyarakat tidak hanya belajar tentang pentingnya kebersihan lingkungan, tetapi juga
-          mempererat tali silaturahmi antar warga. Gotong royong ini telah menjadi tradisi positif yang mengubah wajah
-          Kelurahan Tugurejo menjadi lebih bersih dan asri.
+        Kegiatan sosialisasi mengenai sampah dan lingkungan dilakukan ketika ada kegiatan besar seperti Hari
+        Nasional Lingkungan Hidup, Hari Nasional Lingkungan Hidup Nasional, dan lainnya. Kegiatan ini bertujuan untuk
+        meningkatkan kesadaran masyarakat tentang pengelolaan sampah yang bijak. <br /> <br />
+        Kegiatan ini dilakukan oleh para pengurus dan kader lingkungan yang bertugas untuk membantu masyarakat dalam
+        memilah sampah.
         </p>
       )
     },
   },
   {
-    description: "Program Edukasi untuk Generasi Muda",
-    title: "Edukasi Anak & Remaja",
+    description: "Dilakukan ketika ada kesempatan",
+    title: "Grebek Sampah di Mangrove",
     src: "/Program3.jpg",
-    ctaText: "Pelajari",
+    ctaText: "Detail",
     ctaLink: "#",
     content: () => {
       return (
         <p>
-          Program edukasi anak dan remaja dirancang khusus untuk menanamkan kesadaran lingkungan sejak dini. Melalui
-          berbagai kegiatan edukatif dan menyenangkan, anak-anak dan remaja diajak untuk memahami pentingnya pengelolaan
-          sampah yang benar. <br /> <br />
-          Program ini meliputi workshop kreatif, permainan edukatif, dan demonstrasi langsung tentang cara memilah
-          sampah. Dengan pendekatan yang menarik dan interaktif, generasi muda diharapkan dapat menjadi agen perubahan
-          untuk lingkungan yang lebih bersih di masa depan.
-        </p>
-      )
-    },
-  },
-  {
-    description: "Pelatihan Keterampilan Daur Ulang",
-    title: "Workshop Daur Ulang",
-    src: "/Program4.jpg",
-    ctaText: "Pelajari",
-    ctaLink: "#",
-    content: () => {
-      return (
-        <p>
-          Workshop daur ulang merupakan program pelatihan yang mengajarkan masyarakat cara mengubah sampah menjadi
-          produk yang bernilai ekonomis. Peserta diajarkan berbagai teknik daur ulang untuk mengolah sampah plastik,
-          kertas, dan bahan lainnya menjadi kerajinan tangan yang indah. <br /> <br />
-          Program ini tidak hanya memberikan manfaat lingkungan dengan mengurangi volume sampah, tetapi juga memberikan
-          peluang ekonomi bagi masyarakat. Hasil kerajinan dari workshop ini dapat dijual dan menjadi sumber penghasilan
-          tambahan bagi peserta.
-        </p>
-      )
-    },
-  },
-  {
-    description: "Sosialisasi Program Bank Sampah",
-    title: "Sosialisasi Program",
-    src: "/Program5.jpg",
-    ctaText: "Pelajari",
-    ctaLink: "#",
-    content: () => {
-      return (
-        <p>
-          Program sosialisasi dilakukan secara berkala untuk memperkenalkan konsep bank sampah kepada masyarakat luas.
-          Melalui berbagai kegiatan penyuluhan, presentasi, dan diskusi interaktif, masyarakat diedukasi tentang manfaat
-          dan cara kerja bank sampah. <br /> <br />
-          Sosialisasi ini telah berhasil meningkatkan partisipasi masyarakat dari 58 Kartu Keluarga menjadi 599 KK.
-          Program ini juga melibatkan tokoh masyarakat dan pemerintah setempat untuk memberikan dukungan penuh terhadap
-          inisiatif pengelolaan sampah yang berkelanjutan.
-        </p>
-      )
-    },
-  },
-  {
-    description: "Pelatihan Khusus Ibu-ibu PKK",
-    title: "Pelatihan Ibu-ibu PKK",
-    src: "/Program6.jpg",
-    ctaText: "Pelajari",
-    ctaLink: "#",
-    content: () => {
-      return (
-        <p>
-          Program pelatihan khusus untuk ibu-ibu PKK bertujuan untuk memberdayakan kaum perempuan sebagai motor
-          penggerak program bank sampah di tingkat rumah tangga. Pelatihan ini mencakup teknik pemilahan sampah,
-          pengelolaan tabungan sampah, dan cara mengajak keluarga untuk berpartisipasi aktif. <br /> <br />
-          Ibu-ibu PKK berperan sebagai kader lingkungan yang mengkoordinir kegiatan bank sampah di masing-masing RT.
-          Dengan pelatihan yang komprehensif, mereka mampu menjalankan program dengan efektif dan memberikan dampak
-          positif yang berkelanjutan bagi lingkungan.
+        Kegiatan grebek sampah di mangrove dilakukan ketika ada kesempatan seperti Hari Nasional Lingkungan Hidup, Hari
+        Nasional Lingkungan Hidup Nasional, dan lainnya. Kegiatan ini bertujuan untuk membersihkan lingkungan wisata mangrove dari sampah. <br /> <br />
+        Kegiatan ini dilakukan oleh para pengurus yang bertugas untuk membantu masyarakat dalam membersihkan lingkungan wisata mangrove.
         </p>
       )
     },

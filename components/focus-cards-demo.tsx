@@ -3,28 +3,28 @@ import { FocusCards } from "@/components/ui/focus-cards"
 export default function FocusCardsDemo() {
   const cards = [
     {
-      title: "Sosialisasi Lingkungan",
+      title: "Penimbangan Sampah",
       src: "/Kegiatan1.jpg",
     },
     {
-      title: "Kerajinan dari Limbah",
-      src: "/Kegiatan2.jpg",
-    },
-    {
-      title: "Gerebek Sampah",
+      title: "Pembuatan Sabun Minyak Jelantah",
       src: "/Kegiatan3.jpg",
     },
     {
-      title: "Program Lingkungan",
-      src: "/Program1.jpg",
+      title: "Kupas Tuntas",
+      src: "/Kegiatan5.jpg",
     },
     {
-      title: "Pengelolaan Sampah",
-      src: "/Program2.jpg",
+      title: "Penimbangan Sampah",
+      src: "/Kegiatan2.jpg",
     },
     {
-      title: "Kegiatan Komunitas",
-      src: "/Program3.jpg",
+      title: "Pembuatan Ecoenzym dari Kulit Buah bersama anak UNDIP",
+      src: "/Kegiatan4.jpg",
+    },
+    {
+      title: "Kupas Tuntas bersama anak UNDIP",
+      src: "/Kegiatan6.jpg",
     },
   ]
 

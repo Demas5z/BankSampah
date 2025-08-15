@@ -1019,7 +1019,7 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
 
                     {/* Location marker overlay */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="absolute top-[15%] left-[65%] transform -translate-x-1/2 -translate-y-1/2">
                       <div className="relative">
                         {/* Pulsing animation ring */}
                         <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-75"></div>
@@ -1072,7 +1072,7 @@ export default function HomePage() {
                   className="border-2 border-red-500 text-red-600 hover:bg-red-50 bg-transparent hover:border-red-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex-1 py-6 text-base lg:text-lg"
                 >
                   <Phone className="mr-2 h-5 w-5" />
-                  Telepon Kami
+                  Hubungi Kami
                 </Button>
               </div>
             </div>
@@ -1090,11 +1090,11 @@ export default function HomePage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-700 text-base lg:text-lg leading-relaxed">
-                      Jl. Mawar Merah No. 15
+                      Jalan Tugurejo Raya Komplek Kelurahan
                       <br />
                       Kelurahan Tugurejo, Kecamatan Tugu
                       <br />
-                      Kota Semarang, Jawa Tengah 50151
+                      Kota Semarang, Jawa Tengah 50185
                       <br />
                       Indonesia
                     </p>
@@ -1135,15 +1135,11 @@ export default function HomePage() {
                     <div className="space-y-3 text-gray-700 text-base lg:text-lg">
                       <div className="flex justify-between items-center">
                         <span>Senin - Jumat:</span>
-                        <span className="font-semibold">08:00 - 16:00</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span>Sabtu:</span>
                         <span className="font-semibold">08:00 - 12:00</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span>Minggu:</span>
-                        <span className="font-semibold text-red-600">Tutup</span>
+                        <span>Sabtu - Minggu:</span>
+                        <span className="font-semibold">09:00 - 12:00</span>
                       </div>
                     </div>
                   </CardContent>

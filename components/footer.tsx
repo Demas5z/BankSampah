@@ -71,9 +71,9 @@ export default function Footer() {
                 <MapPin className="h-5 w-5 text-green-300 mt-1 group-hover:text-white transition-colors duration-300" />
                 <div>
                   <span className="text-green-100 text-sm lg:text-base leading-relaxed group-hover:text-white transition-colors duration-300">
-                    Jl. Tugurejo Tim. XI No.1, Tugurejo
+                  Jalan Tugurejo Raya Komplek Kelurahan Kelurahan Tugurejo,
                     <br />
-                    Kec. Tugu, Kota Semarang, Jawa Tengah 50182
+                    Kecamatan Tugu Kota Semarang, Jawa Tengah 50185 Indonesia
                   </span>
                 </div>
               </div>
@@ -96,12 +96,12 @@ export default function Footer() {
               <h5 className="font-semibold text-white mb-3 text-base lg:text-lg">Jam Operasional</h5>
               <div className="space-y-2 text-green-100 text-sm lg:text-base">
                 <div className="flex justify-between">
-                  <span>Sen - Jum:</span>
-                  <span>08:00 - 16:00</span>
+                  <span>Senin - Jumat:</span>
+                  <span>08:00 - 12:00</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Sabtu:</span>
-                  <span>08:00 - 12:00</span>
+                  <span>Sabtu - Minggu:</span>
+                  <span>09:00 - 12:00</span>
                 </div>
               </div>
             </div>
