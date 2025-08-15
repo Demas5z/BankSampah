@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useId, useRef, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { useOutsideClick } from "@/hooks/use-outside-click"
 
 export default function ExpandableCardDemo() {
@@ -58,7 +58,7 @@ export default function ExpandableCardDemo() {
                   duration: 0.05,
                 },
               }}
-              className="flex absolute top-2 right-2 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6 shadow-lg"
+              className="flex absolute top-2 right-2 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6"
               onClick={() => setActive(null)}
             >
               <CloseIcon />
@@ -66,7 +66,7 @@ export default function ExpandableCardDemo() {
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
-              className="w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden shadow-2xl"
+              className="w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
             >
               <motion.div layoutId={`image-${active.title}-${id}`}>
                 <img
@@ -74,7 +74,7 @@ export default function ExpandableCardDemo() {
                   height={200}
                   src={active.src || "/placeholder.svg"}
                   alt={active.title}
-                  className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-center"
+                  className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
                 />
               </motion.div>
 
@@ -83,13 +83,13 @@ export default function ExpandableCardDemo() {
                   <div className="">
                     <motion.h3
                       layoutId={`title-${active.title}-${id}`}
-                      className="font-bold text-gray-900 dark:text-neutral-200 text-lg"
+                      className="font-bold text-neutral-700 dark:text-neutral-200"
                     >
                       {active.title}
                     </motion.h3>
                     <motion.p
                       layoutId={`description-${active.description}-${id}`}
-                      className="text-gray-600 dark:text-neutral-400 text-sm"
+                      className="text-neutral-600 dark:text-neutral-400"
                     >
                       {active.description}
                     </motion.p>
@@ -99,7 +99,7 @@ export default function ExpandableCardDemo() {
                     layoutId={`button-${active.title}-${id}`}
                     href={active.ctaLink}
                     target="_blank"
-                    className="px-4 py-3 text-sm rounded-full font-bold bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white hover:bg-green-600 transition-colors duration-200"
                     rel="noreferrer"
                   >
                     {active.ctaText}
@@ -111,7 +111,7 @@ export default function ExpandableCardDemo() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="text-gray-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
+                    className="text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
                   >
                     {typeof active.content === "function" ? active.content() : active.content}
                   </motion.div>
@@ -121,50 +121,48 @@ export default function ExpandableCardDemo() {
           </div>
         ) : null}
       </AnimatePresence>
-      <div className="max-w-4xl mx-auto w-full">
-        <div className="space-y-4">
-          {cards.map((card, index) => (
-            <motion.div
-              layoutId={`card-${card.title}-${id}`}
-              key={`card-${card.title}-${id}`}
-              onClick={() => setActive(card)}
-              className="p-6 flex flex-col md:flex-row justify-between items-center hover:bg-gradient-to-r hover:from-green-50 hover:to-red-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer border border-gray-100 hover:border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white"
-            >
-              <div className="flex gap-6 flex-col md:flex-row items-center">
-                <motion.div layoutId={`image-${card.title}-${id}`}>
-                  <img
-                    width={100}
-                    height={100}
-                    src={card.src || "/placeholder.svg"}
-                    alt={card.title}
-                    className="h-40 w-40 md:h-16 md:w-16 rounded-xl object-cover shadow-lg"
-                  />
-                </motion.div>
-                <div className="text-center md:text-left">
-                  <motion.h3
-                    layoutId={`title-${card.title}-${id}`}
-                    className="font-bold text-gray-900 dark:text-neutral-200 text-lg mb-2"
-                  >
-                    {card.title}
-                  </motion.h3>
-                  <motion.p
-                    layoutId={`description-${card.description}-${id}`}
-                    className="text-gray-600 dark:text-neutral-400 text-sm leading-relaxed"
-                  >
-                    {card.description}
-                  </motion.p>
-                </div>
+      <ul className="max-w-2xl mx-auto w-full gap-4">
+        {cards.map((card, index) => (
+          <motion.div
+            layoutId={`card-${card.title}-${id}`}
+            key={`card-${card.title}-${id}`}
+            onClick={() => setActive(card)}
+            className="p-4 flex flex-col md:flex-row justify-between items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-all duration-200"
+          >
+            <div className="flex gap-4 flex-col md:flex-row ">
+              <motion.div layoutId={`image-${card.title}-${id}`}>
+                <img
+                  width={100}
+                  height={100}
+                  src={card.src || "/placeholder.svg"}
+                  alt={card.title}
+                  className="h-40 w-40 md:h-14 md:w-14 rounded-lg object-cover object-top"
+                />
+              </motion.div>
+              <div className="">
+                <motion.h3
+                  layoutId={`title-${card.title}-${id}`}
+                  className="font-medium text-neutral-800 dark:text-neutral-200 text-center md:text-left"
+                >
+                  {card.title}
+                </motion.h3>
+                <motion.p
+                  layoutId={`description-${card.description}-${id}`}
+                  className="text-neutral-600 dark:text-neutral-400 text-center md:text-left"
+                >
+                  {card.description}
+                </motion.p>
               </div>
-              <motion.button
-                layoutId={`button-${card.title}-${id}`}
-                className="px-6 py-3 text-sm rounded-full font-bold bg-gray-100 hover:bg-gradient-to-r hover:from-green-600 hover:to-green-500 hover:text-white text-gray-700 mt-4 md:mt-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              >
-                {card.ctaText}
-              </motion.button>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+            </div>
+            <motion.button
+              layoutId={`button-${card.title}-${id}`}
+              className="px-4 py-2 text-sm rounded-full font-bold bg-gray-100 hover:bg-green-500 hover:text-white text-black mt-4 md:mt-0 transition-colors duration-200"
+            >
+              {card.ctaText}
+            </motion.button>
+          </motion.div>
+        ))}
+      </ul>
     </>
   )
 }
@@ -211,179 +209,110 @@ const cards = [
     ctaLink: "#",
     content: () => {
       return (
-        <div className="space-y-4">
-          <p className="text-justify">
-            Program pemberdayaan masyarakat Bank Sampah Mawar Merah bertujuan untuk meningkatkan kesadaran dan
-            partisipasi aktif warga dalam pengelolaan sampah. Program ini melibatkan seluruh lapisan masyarakat dari
-            berbagai usia.
-          </p>
-          <p className="text-justify">
-            Melalui program ini, kami mengajarkan teknik pemilahan sampah yang benar, cara mengolah sampah organik
-            menjadi kompos, dan mengubah sampah anorganik menjadi produk bernilai ekonomis. Setiap peserta mendapat
-            pelatihan komprehensif tentang manfaat ekonomi dan lingkungan dari pengelolaan sampah yang baik.
-          </p>
-          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-            <h4 className="font-semibold text-green-800 mb-2">Manfaat Program:</h4>
-            <ul className="text-green-700 text-sm space-y-1">
-              <li>• Meningkatkan pendapatan keluarga</li>
-              <li>• Mengurangi volume sampah rumah tangga</li>
-              <li>• Menciptakan lingkungan yang lebih bersih</li>
-              <li>• Membangun kesadaran lingkungan</li>
-            </ul>
-          </div>
-        </div>
+        <p>
+          Program pemberdayaan komunitas Bank Sampah Mawar Merah bertujuan untuk meningkatkan kesadaran masyarakat
+          tentang pengelolaan sampah yang bijak. Melalui program ini, kami mengajak warga untuk berpartisipasi aktif
+          dalam kegiatan pemilahan sampah dari rumah ke rumah. <br /> <br />
+          Program ini telah berhasil mengubah pola pikir masyarakat Tugurejo, dari yang awalnya kurang peduli terhadap
+          kebersihan lingkungan menjadi lebih sadar akan pentingnya menjaga kelestarian lingkungan. Dengan melibatkan
+          599 Kartu Keluarga, program ini telah memberikan dampak positif yang signifikan bagi lingkungan dan ekonomi
+          masyarakat.
+        </p>
       )
     },
   },
   {
-    description: "Kegiatan Gotong Royong Komunitas",
+    description: "Kegiatan Gotong Royong Lingkungan",
     title: "Gotong Royong Lingkungan",
     src: "/Program2.jpg",
     ctaText: "Pelajari",
     ctaLink: "#",
     content: () => {
       return (
-        <div className="space-y-4">
-          <p className="text-justify">
-            Kegiatan gotong royong merupakan tradisi yang kami lestarikan dalam program kebersihan lingkungan. Setiap
-            minggu, warga berkumpul untuk membersihkan area RT/RW dan melakukan pemilahan sampah bersama-sama.
-          </p>
-          <p className="text-justify">
-            Kegiatan ini tidak hanya membersihkan lingkungan, tetapi juga mempererat tali silaturahmi antar warga. Kami
-            mengorganisir pembersihan saluran air, pengumpulan sampah door-to-door, dan penanaman pohon di area komunal.
-          </p>
-          <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-            <h4 className="font-semibold text-red-800 mb-2">Jadwal Kegiatan:</h4>
-            <ul className="text-red-700 text-sm space-y-1">
-              <li>• Setiap Minggu pagi (07:00 - 09:00)</li>
-              <li>• Pembersihan saluran air bulanan</li>
-              <li>• Penanaman pohon setiap 3 bulan</li>
-              <li>• Sosialisasi rutin setiap bulan</li>
-            </ul>
-          </div>
-        </div>
+        <p>
+          Kegiatan gotong royong lingkungan merupakan salah satu program unggulan Bank Sampah Mawar Merah yang
+          melibatkan seluruh lapisan masyarakat. Program ini dilaksanakan secara rutin untuk membersihkan lingkungan
+          sekitar dan memilah sampah bersama-sama. <br /> <br />
+          Melalui kegiatan ini, masyarakat tidak hanya belajar tentang pentingnya kebersihan lingkungan, tetapi juga
+          mempererat tali silaturahmi antar warga. Gotong royong ini telah menjadi tradisi positif yang mengubah wajah
+          Kelurahan Tugurejo menjadi lebih bersih dan asri.
+        </p>
       )
     },
   },
   {
-    description: "Program Edukasi Lingkungan untuk Generasi Muda",
+    description: "Program Edukasi untuk Generasi Muda",
     title: "Edukasi Anak & Remaja",
     src: "/Program3.jpg",
     ctaText: "Pelajari",
     ctaLink: "#",
     content: () => {
       return (
-        <div className="space-y-4">
-          <p className="text-justify">
-            Program edukasi khusus untuk anak-anak dan remaja bertujuan menanamkan kesadaran lingkungan sejak dini. Kami
-            menggunakan metode pembelajaran yang menyenangkan dan interaktif.
-          </p>
-          <p className="text-justify">
-            Kegiatan meliputi workshop kreatif membuat kerajinan dari sampah daur ulang, permainan edukatif tentang
-            lingkungan, dan kompetisi kebersihan antar kelas. Program ini bekerja sama dengan sekolah-sekolah di sekitar
-            Tugurejo.
-          </p>
-          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-            <h4 className="font-semibold text-green-800 mb-2">Target Peserta:</h4>
-            <ul className="text-green-700 text-sm space-y-1">
-              <li>• Anak usia 6-12 tahun (SD)</li>
-              <li>• Remaja usia 13-18 tahun (SMP-SMA)</li>
-              <li>• Kelompok bermain dan PAUD</li>
-              <li>• Karang taruna setempat</li>
-            </ul>
-          </div>
-        </div>
+        <p>
+          Program edukasi anak dan remaja dirancang khusus untuk menanamkan kesadaran lingkungan sejak dini. Melalui
+          berbagai kegiatan edukatif dan menyenangkan, anak-anak dan remaja diajak untuk memahami pentingnya pengelolaan
+          sampah yang benar. <br /> <br />
+          Program ini meliputi workshop kreatif, permainan edukatif, dan demonstrasi langsung tentang cara memilah
+          sampah. Dengan pendekatan yang menarik dan interaktif, generasi muda diharapkan dapat menjadi agen perubahan
+          untuk lingkungan yang lebih bersih di masa depan.
+        </p>
       )
     },
   },
   {
-    description: "Workshop Daur Ulang dan Keterampilan",
+    description: "Pelatihan Keterampilan Daur Ulang",
     title: "Workshop Daur Ulang",
     src: "/Program4.jpg",
     ctaText: "Pelajari",
     ctaLink: "#",
     content: () => {
       return (
-        <div className="space-y-4">
-          <p className="text-justify">
-            Workshop daur ulang mengajarkan teknik mengubah sampah menjadi produk bernilai ekonomis. Peserta belajar
-            membuat berbagai kerajinan tangan dari botol plastik, kardus, dan bahan bekas lainnya.
-          </p>
-          <p className="text-justify">
-            Produk yang dihasilkan meliputi tas belanja dari plastik bekas, pot tanaman dari botol, hiasan rumah dari
-            kardus, dan masih banyak lagi. Hasil karya dapat dijual untuk menambah penghasilan keluarga.
-          </p>
-          <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-            <h4 className="font-semibold text-red-800 mb-2">Produk Unggulan:</h4>
-            <ul className="text-red-700 text-sm space-y-1">
-              <li>• Tas belanja dari plastik bekas</li>
-              <li>• Pot tanaman dari botol plastik</li>
-              <li>• Hiasan dinding dari kardus</li>
-              <li>• Tempat pensil dari kaleng bekas</li>
-            </ul>
-          </div>
-        </div>
+        <p>
+          Workshop daur ulang merupakan program pelatihan yang mengajarkan masyarakat cara mengubah sampah menjadi
+          produk yang bernilai ekonomis. Peserta diajarkan berbagai teknik daur ulang untuk mengolah sampah plastik,
+          kertas, dan bahan lainnya menjadi kerajinan tangan yang indah. <br /> <br />
+          Program ini tidak hanya memberikan manfaat lingkungan dengan mengurangi volume sampah, tetapi juga memberikan
+          peluang ekonomi bagi masyarakat. Hasil kerajinan dari workshop ini dapat dijual dan menjadi sumber penghasilan
+          tambahan bagi peserta.
+        </p>
       )
     },
   },
   {
-    description: "Program Sosialisasi dan Penyuluhan",
+    description: "Sosialisasi Program Bank Sampah",
     title: "Sosialisasi Program",
     src: "/Program5.jpg",
     ctaText: "Pelajari",
     ctaLink: "#",
     content: () => {
       return (
-        <div className="space-y-4">
-          <p className="text-justify">
-            Program sosialisasi dilakukan secara rutin untuk meningkatkan partisipasi masyarakat dalam program bank
-            sampah. Kami mengunjungi rumah-rumah warga, mengadakan pertemuan RT/RW, dan presentasi di berbagai acara
-            komunitas.
-          </p>
-          <p className="text-justify">
-            Sosialisasi mencakup penjelasan tentang manfaat bank sampah, cara kerja sistem tabungan sampah, jenis-jenis
-            sampah yang dapat ditabung, dan dampak positif bagi lingkungan dan ekonomi keluarga.
-          </p>
-          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-            <h4 className="font-semibold text-green-800 mb-2">Metode Sosialisasi:</h4>
-            <ul className="text-green-700 text-sm space-y-1">
-              <li>• Kunjungan door-to-door</li>
-              <li>• Pertemuan RT/RW bulanan</li>
-              <li>• Presentasi di acara komunitas</li>
-              <li>• Media sosial dan brosur</li>
-            </ul>
-          </div>
-        </div>
+        <p>
+          Program sosialisasi dilakukan secara berkala untuk memperkenalkan konsep bank sampah kepada masyarakat luas.
+          Melalui berbagai kegiatan penyuluhan, presentasi, dan diskusi interaktif, masyarakat diedukasi tentang manfaat
+          dan cara kerja bank sampah. <br /> <br />
+          Sosialisasi ini telah berhasil meningkatkan partisipasi masyarakat dari 58 Kartu Keluarga menjadi 599 KK.
+          Program ini juga melibatkan tokoh masyarakat dan pemerintah setempat untuk memberikan dukungan penuh terhadap
+          inisiatif pengelolaan sampah yang berkelanjutan.
+        </p>
       )
     },
   },
   {
-    description: "Pelatihan Keterampilan Ibu-ibu PKK",
+    description: "Pelatihan Khusus Ibu-ibu PKK",
     title: "Pelatihan Ibu-ibu PKK",
     src: "/Program6.jpg",
     ctaText: "Pelajari",
     ctaLink: "#",
     content: () => {
       return (
-        <div className="space-y-4">
-          <p className="text-justify">
-            Program khusus untuk ibu-ibu PKK yang fokus pada pelatihan keterampilan mengelola sampah rumah tangga.
-            Pelatihan meliputi teknik komposting, pembuatan eco-enzyme, dan pengolahan sampah organik menjadi pupuk.
-          </p>
-          <p className="text-justify">
-            Ibu-ibu juga dilatih untuk menjadi agen perubahan di lingkungan masing-masing, mengajarkan tetangga tentang
-            pentingnya pemilahan sampah dan cara mengurangi produksi sampah rumah tangga.
-          </p>
-          <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-            <h4 className="font-semibold text-red-800 mb-2">Materi Pelatihan:</h4>
-            <ul className="text-red-700 text-sm space-y-1">
-              <li>• Teknik komposting rumah tangga</li>
-              <li>• Pembuatan eco-enzyme</li>
-              <li>• Pengolahan sampah organik</li>
-              <li>• Mengurangi penggunaan plastik</li>
-            </ul>
-          </div>
-        </div>
+        <p>
+          Program pelatihan khusus untuk ibu-ibu PKK bertujuan untuk memberdayakan kaum perempuan sebagai motor
+          penggerak program bank sampah di tingkat rumah tangga. Pelatihan ini mencakup teknik pemilahan sampah,
+          pengelolaan tabungan sampah, dan cara mengajak keluarga untuk berpartisipasi aktif. <br /> <br />
+          Ibu-ibu PKK berperan sebagai kader lingkungan yang mengkoordinir kegiatan bank sampah di masing-masing RT.
+          Dengan pelatihan yang komprehensif, mereka mampu menjalankan program dengan efektif dan memberikan dampak
+          positif yang berkelanjutan bagi lingkungan.
+        </p>
       )
     },
   },

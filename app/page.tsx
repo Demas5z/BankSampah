@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import {
   ArrowRight,
   Award,
@@ -26,6 +27,7 @@ import {
 import { useState, useRef, useEffect } from "react"
 import FocusCardsDemo from "@/components/focus-cards-demo"
 import ExpandableCardDemo from "@/components/expandable-card-demo"
+import Autoplay from "embla-carousel-autoplay"
 
 export default function HomePage() {
   const [expandedSections, setExpandedSections] = useState<{ mission: boolean; vision: boolean; goals: boolean }>({
@@ -41,8 +43,10 @@ export default function HomePage() {
   const [selisihTahun, setSelisihTahun] = useState<number>(0)
   const tahunBerdiriAwal = 2010
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [currentSejarahIndex, setCurrentSejarahIndex] = useState(0)
+  // Autoplay plugin for carousels
+  const autoplayPlugin = useRef(Autoplay({ delay: 4000, stopOnInteraction: true }))
+
+  const sejarahAutoplayPlugin = useRef(Autoplay({ delay: 4500, stopOnInteraction: true }))
 
   const carouselImages = [
     {
@@ -82,24 +86,6 @@ export default function HomePage() {
       description: "Gotong royong membersihkan lingkungan bersama",
     },
   ]
-
-  // Auto-scroll effect for main carousel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1))
-    }, 4000) // Change image every 4 seconds
-
-    return () => clearInterval(interval)
-  }, [carouselImages.length])
-
-  // Auto-scroll effect for Sejarah carousel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSejarahIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1))
-    }, 4500) // Slightly different timing to avoid sync
-
-    return () => clearInterval(interval)
-  }, [carouselImages.length])
 
   useEffect(() => {
     const tahunSaatIni = new Date().getFullYear()
@@ -195,73 +181,40 @@ export default function HomePage() {
             </div>
 
             <div className="relative mt-8 lg:mt-0">
-              {/* Auto-scrolling Carousel */}
-              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl">
-                <div className="relative h-[400px] lg:h-[500px] overflow-hidden">
-                  {/* Carousel Container */}
-                  <div
-                    className="flex transition-transform duration-1000 ease-in-out h-full"
-                    style={{
-                      transform: `translateX(-${currentImageIndex * 100}%)`,
-                      width: `${carouselImages.length * 100}%`,
-                    }}
-                  >
-                    {carouselImages.map((image, index) => (
-                      <div
-                        key={index}
-                        className="relative flex-shrink-0 w-full h-full"
-                        style={{ width: `${100 / carouselImages.length}%` }}
-                      >
-                        <img
-                          src={image.src || "/placeholder.svg"}
-                          alt={image.alt}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+              {/* Shadcn/UI Carousel Implementation */}
+              <Carousel
+                plugins={[autoplayPlugin.current]}
+                className="w-full max-w-2xl mx-auto"
+                onMouseEnter={autoplayPlugin.current.stop}
+                onMouseLeave={autoplayPlugin.current.reset}
+              >
+                <CarouselContent>
+                  {carouselImages.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl">
+                        <div className="relative h-[400px] lg:h-[500px]">
+                          <img
+                            src={image.src || "/placeholder.svg"}
+                            alt={image.alt}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
-                        {/* Image Title Overlay */}
-                        <div className="absolute bottom-6 left-6 right-6">
-                          <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-                            <h3 className="text-gray-900 text-lg font-semibold mb-1">{image.title}</h3>
-                            <p className="text-gray-600 text-sm">{image.description}</p>
+                          {/* Image Title Overlay */}
+                          <div className="absolute bottom-6 left-6 right-6">
+                            <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                              <h3 className="text-gray-900 text-lg font-semibold mb-1">{image.title}</h3>
+                              <p className="text-gray-600 text-sm">{image.description}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Carousel Indicators */}
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    {carouselImages.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentImageIndex(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                          index === currentImageIndex ? "bg-white shadow-lg" : "bg-white/50 hover:bg-white/75"
-                        }`}
-                        aria-label={`Go to slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Navigation Arrows */}
-                  <button
-                    onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1))}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft className="h-5 w-5 text-gray-700" />
-                  </button>
-
-                  <button
-                    onClick={() => setCurrentImageIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1))}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight className="h-5 w-5 text-gray-700" />
-                  </button>
-                </div>
-              </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-4 bg-white/80 hover:bg-white backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110" />
+                <CarouselNext className="right-4 bg-white/80 hover:bg-white backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110" />
+              </Carousel>
             </div>
           </div>
         </div>
@@ -472,80 +425,42 @@ export default function HomePage() {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Carousel - Now on the left */}
+            {/* Shadcn/UI Carousel for Sejarah - Now on the left */}
             <div className="relative order-1 lg:order-1">
-              {/* Auto-scrolling Carousel for Sejarah */}
-              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl">
-                <div className="relative h-[350px] lg:h-[450px] overflow-hidden">
-                  {/* Carousel Container */}
-                  <div
-                    className="flex transition-transform duration-1000 ease-in-out h-full"
-                    style={{
-                      transform: `translateX(-${currentSejarahIndex * 100}%)`,
-                      width: `${carouselImages.length * 100}%`,
-                    }}
-                  >
-                    {carouselImages.map((image, index) => (
-                      <div
-                        key={`sejarah-${index}`}
-                        className="relative flex-shrink-0 w-full h-full"
-                        style={{ width: `${100 / carouselImages.length}%` }}
-                      >
-                        <img
-                          src={image.src || "/placeholder.svg"}
-                          alt={`Sejarah - ${image.alt}`}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+              <Carousel
+                plugins={[sejarahAutoplayPlugin.current]}
+                className="w-full max-w-lg mx-auto"
+                onMouseEnter={sejarahAutoplayPlugin.current.stop}
+                onMouseLeave={sejarahAutoplayPlugin.current.reset}
+              >
+                <CarouselContent>
+                  {carouselImages.map((image, index) => (
+                    <CarouselItem key={`sejarah-${index}`}>
+                      <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl">
+                        <div className="relative h-[350px] lg:h-[450px]">
+                          <img
+                            src={image.src || "/placeholder.svg"}
+                            alt={`Sejarah - ${image.alt}`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
-                        {/* Image Title Overlay */}
-                        <div className="absolute bottom-4 left-4 right-4">
-                          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg">
-                            <h4 className="text-gray-900 text-base font-semibold mb-1">{image.title}</h4>
-                            <p className="text-gray-600 text-xs">{image.description}</p>
+                          {/* Image Title Overlay */}
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg">
+                              <h4 className="text-gray-900 text-base font-semibold mb-1">{image.title}</h4>
+                              <p className="text-gray-600 text-xs">{image.description}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Carousel Indicators */}
-                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1.5">
-                    {carouselImages.map((_, index) => (
-                      <button
-                        key={`sejarah-indicator-${index}`}
-                        onClick={() => setCurrentSejarahIndex(index)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                          index === currentSejarahIndex ? "bg-white shadow-lg" : "bg-white/60 hover:bg-white/80"
-                        }`}
-                        aria-label={`Go to slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Navigation Arrows */}
-                  <button
-                    onClick={() =>
-                      setCurrentSejarahIndex((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1))
-                    }
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-300 hover:scale-110"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft className="h-4 w-4 text-gray-700" />
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      setCurrentSejarahIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1))
-                    }
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-300 hover:scale-110"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight className="h-4 w-4 text-gray-700" />
-                  </button>
-                </div>
-              </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-3 bg-white/90 hover:bg-white backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 h-8 w-8" />
+                <CarouselNext className="right-3 bg-white/90 hover:bg-white backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 h-8 w-8" />
+              </Carousel>
             </div>
 
             {/* Text Content - Now on the right */}
@@ -1079,22 +994,72 @@ export default function HomePage() {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-            {/* Peta Interaktif */}
+            {/* Custom Map Image Container */}
             <div className="space-y-6">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Lokasi Kami</h2>
-              <div className="bg-gray-100 rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-shadow duration-500">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.2!2d110.3!3d-7.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMDAnMDAuMCJTIDExMMKwMTgnMDAuMCJF!5e0!3m2!1sen!2sid!4v1234567890"
-                  width="100%"
-                  height="400"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Lokasi Bank Sampah Mawar Merah"
-                  className="lg:h-96"
-                ></iframe>
+
+              {/* Enhanced Map Container */}
+              <div className="relative group">
+                {/* Decorative background elements */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-green-600 via-green-500 to-red-600 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+
+                {/* Main map container */}
+                <div className="relative bg-white rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 border border-gray-100">
+                  {/* Map image with aspect ratio preservation */}
+                  <div className="relative aspect-[16/10] lg:aspect-[4/3] overflow-hidden">
+                    <img
+                      src="/PetaBankSampah.jpg"
+                      alt="Peta Lokasi Bank Sampah Mawar Merah di Kelurahan Tugurejo"
+                      className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+                    />
+
+                    {/* Gradient overlay for better text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+
+                    {/* Location marker overlay */}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      <div className="relative">
+                        {/* Pulsing animation ring */}
+                        <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-75"></div>
+                        <div className="absolute inset-0 bg-red-500 rounded-full animate-pulse opacity-50 scale-110"></div>
+
+                        {/* Main marker */}
+                        <div className="relative bg-red-600 hover:bg-red-700 transition-colors duration-300 rounded-full p-3 shadow-lg">
+                          <MapPin className="h-6 w-6 text-white" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Info overlay */}
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20">
+                        <div className="flex items-center space-x-3">
+                          <div className="bg-gradient-to-r from-green-600 to-red-600 rounded-full p-2">
+                            <MapPin className="h-4 w-4 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="text-gray-900 text-sm font-semibold">Bank Sampah Mawar Merah</h4>
+                            <p className="text-gray-600 text-xs">Kelurahan Tugurejo, Semarang</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Interactive border effect */}
+                  <div className="absolute inset-0 rounded-2xl lg:rounded-3xl border-2 border-transparent bg-gradient-to-r from-green-600 via-transparent to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                </div>
+
+                {/* Floating stats */}
+                <div className="absolute -top-4 -right-4 bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-green-200 shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-green-600">📍</div>
+                    <div className="text-xs text-gray-600">Lokasi Aktif</div>
+                  </div>
+                </div>
               </div>
+
+              {/* Action buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex-1 py-6 text-base lg:text-lg">
                   <MapPin className="mr-2 h-5 w-5" />
@@ -1110,7 +1075,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Informasi Kontak */}
+            {/* Informasi Kontak - keep existing content */}
             <div className="space-y-6">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Informasi Kontak</h2>
               <div className="space-y-6">
