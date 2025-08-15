@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/navbar"
@@ -30,8 +30,12 @@ export const metadata: Metadata = {
     title: "Bank Sampah Mawar Merah - Waste Management Tugurejo Village",
     description: "Community-based waste management and recycling programs in Tugurejo Village, Semarang.",
   },
-  viewport: "width=device-width, initial-scale=1",
   generator: "v0.dev",
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 }
 
 export default function RootLayout({
